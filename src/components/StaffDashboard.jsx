@@ -21,7 +21,8 @@ import {
     Clock4,
     AlertCircle,
     RefreshCw,
-    Mail
+    Mail,
+    Activity
 } from 'lucide-react';
 import {
     AreaChart,
@@ -236,76 +237,6 @@ const OperationalCard = ({ icon, label, value, trend, trendColor, variants }) =>
                 </div>
                 <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{label}</p>
             </div>
-        </motion.div>
-    );
-};
-
-            {/* 4. ACTION PROTOCOLS */}
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 px-2">
-                <ActionCard
-                    title="Start Ledger"
-                    desc="Open attendance entry portal"
-                    icon={<PlayCircle size={20} />}
-                    onClick={() => onNavigateToAttendance('attendance')}
-                    color="indigo"
-                />
-                <ActionCard
-                    title="Review Leaves"
-                    desc="Process pending applications"
-                    icon={<BadgeCheck size={20} />}
-                    onClick={() => onNavigateToAttendance('leave')}
-                    color="amber"
-                />
-                <ActionCard
-                    title="Generate Reports"
-                    desc="Open custom reporting tool"
-                    icon={<FileText size={20} />}
-                    onClick={() => onNavigateToAttendance('reports')}
-                    color="rose"
-                />
-                <ActionCard
-                    title="Export Intel"
-                    desc="Download CSV registry data"
-                    icon={<Download size={20} />}
-                    onClick={() => downloadFile(generateCSV(students), 'Registry_Report.csv')}
-                    color="emerald"
-                />
-                <ActionCard
-                    title="Send SMS"
-                    desc="Notify parents of attendance"
-                    icon={<Mail size={20} />}
-                    onClick={onSendSMS}
-                    color="amber"
-                />
-                <ActionCard
-                    title="System Profile"
-                    desc="Manage faculty credentials"
-                    icon={<Users size={20} />}
-                    onClick={() => onNavigateToAttendance('profile')}
-                    color="slate"
-                />
-            </div>
-        </motion.div>
-    );
-};
-
-const OperationalCard = ({ icon, label, value, subLabel, variants }) => {
-    return (
-        <motion.div
-            variants={variants}
-            className="flex flex-col items-start gap-1 px-4"
-        >
-            <div className="text-slate-900/90 mb-4">
-                {icon}
-            </div>
-            <div className="flex items-center gap-3 text-slate-500 mb-2">
-                <div className="w-6 h-6 border-2 border-slate-200 rounded-full flex items-center justify-center">
-                    {React.cloneElement(icon, { size: 12, strokeWidth: 2.5 })}
-                </div>
-                <span className="text-[12px] font-black uppercase tracking-[0.15em] leading-none">{label}</span>
-            </div>
-            <h3 className="text-5xl font-black text-slate-900 leading-tight tracking-tight">{value}</h3>
-            <p className="text-[13px] font-bold text-slate-400 mt-2 uppercase tracking-widest">{subLabel}</p>
         </motion.div>
     );
 };
