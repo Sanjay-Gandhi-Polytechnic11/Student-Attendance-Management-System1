@@ -78,62 +78,53 @@ const StaffDashboard = ({ onNavigateToAttendance, students = [], onSendSMS }) =>
             animate="visible"
         >
             {/* 1. INSTITUTIONAL HEADER */}
-            <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-2">
-                <div>
-                    <h1 className="text-6xl font-black text-slate-800 tracking-tight leading-tight">
-                        Staff <span className="text-indigo-600 italic">Command Center</span>
-                    </h1>
-                    <p className="text-slate-400 font-medium text-xl mt-2 flex items-center gap-2">
-                        <Cpu size={18} className="text-indigo-500" />
+            <motion.div variants={itemVariants} className="px-2 space-y-1">
+                <h1 className="text-4xl font-black text-slate-900 tracking-tight">
+                    Staff Command Center
+                </h1>
+                <div className="flex flex-col gap-1 text-slate-500 font-bold">
+                    <p className="flex items-center gap-2 text-sm">
+                        <Cpu size={16} />
                         Operational analytics and personnel registry oversight.
                     </p>
-                </div>
-
-                <div className="flex items-center gap-3">
-                    <div className="bg-white/5 border border-white/10 px-4 py-2 rounded-xl flex items-center gap-3">
-                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Real-time Sync Active</span>
-                    </div>
+                    <p className="text-sm">Real-time Sync Active</p>
                 </div>
             </motion.div>
 
-            {/* 2. INTELLIGENCE GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-2">
+            {/* 2. INTELLIGENCE GRID - Vertical Minimalist Design */}
+            <div className="flex flex-col gap-12 px-2">
                 <OperationalCard
-                    icon={<Users size={24} />}
+                    icon={<Users size={60} strokeWidth={1.5} />}
                     label="Active Registry"
                     value={totalCount}
                     subLabel="Total Students"
-                    color="indigo"
                     variants={itemVariants}
                 />
                 <OperationalCard
-                    icon={<CheckCircle2 size={24} />}
+                    icon={<CheckCircle2 size={60} strokeWidth={1.5} />}
                     label="Attendance Quota"
                     value={presentToday}
                     subLabel="Present Personnel"
-                    color="emerald"
                     variants={itemVariants}
                 />
                 <OperationalCard
-                    icon={<AlertCircle size={24} />}
+                    icon={<AlertCircle size={60} strokeWidth={1.5} />}
                     label="Missing Entries"
                     value={absentToday}
                     subLabel="Absent / Pending"
-                    color="rose"
                     variants={itemVariants}
                 />
             </div>
 
             {/* 3. ANALYTICS HUB */}
-            <motion.div className="glass-panel overflow-hidden p-0" variants={itemVariants}>
-                <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <motion.div className="bg-white border border-slate-100 rounded-[32px] overflow-hidden shadow-sm" variants={itemVariants}>
+                <div className="p-8 border-b border-slate-50 flex items-center justify-between bg-slate-50/30">
                     <div className="flex items-center gap-4">
-                        <div className="w-1.5 h-6 bg-indigo-500 rounded-full"></div>
+                        <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
                         <h3 className="text-lg font-black text-slate-800 uppercase tracking-[0.2em]">Institutional Stability Data</h3>
                     </div>
                     <div className="flex items-center gap-2">
-                        <button className="p-2 text-slate-400 hover:text-indigo-600 transition-all"><RefreshCw size={18} /></button>
+                        <button className="p-2 text-slate-300 hover:text-indigo-600 transition-all"><RefreshCw size={18} /></button>
                     </div>
                 </div>
 
@@ -228,7 +219,7 @@ const StaffDashboard = ({ onNavigateToAttendance, students = [], onSendSMS }) =>
                     title="Start Ledger"
                     desc="Open attendance entry portal"
                     icon={<PlayCircle size={20} />}
-                    onClick={() => onNavigateToAttendance('staff-attendance')}
+                    onClick={() => onNavigateToAttendance('attendance')}
                     color="indigo"
                 />
                 <ActionCard
@@ -271,36 +262,23 @@ const StaffDashboard = ({ onNavigateToAttendance, students = [], onSendSMS }) =>
     );
 };
 
-const OperationalCard = ({ icon, label, value, subLabel, color, variants }) => {
-    const colors = {
-        indigo: "from-indigo-600 to-indigo-800 shadow-indigo-200",
-        emerald: "from-emerald-500 to-emerald-700 shadow-emerald-200",
-        rose: "from-rose-500 to-rose-700 shadow-rose-200"
-    };
-
+const OperationalCard = ({ icon, label, value, subLabel, variants }) => {
     return (
         <motion.div
             variants={variants}
-            whileHover={{ y: -6 }}
-            className={`bg-gradient-to-br ${colors[color]} p-8 rounded-[32px] text-white shadow-xl relative overflow-hidden group`}
+            className="flex flex-col items-start gap-1 px-4"
         >
-            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform duration-700">
-                {React.cloneElement(icon, { size: 100 })}
+            <div className="text-slate-900/90 mb-4">
+                {icon}
             </div>
-
-            <div className="relative z-10 flex flex-col h-full space-y-4">
-                <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-white/20 backdrop-blur-md rounded-xl">
-                        {React.cloneElement(icon, { size: 20 })}
-                    </div>
-                    <span className="text-[13px] font-black uppercase tracking-[0.2em] opacity-80">{label}</span>
+            <div className="flex items-center gap-3 text-slate-500 mb-2">
+                <div className="w-6 h-6 border-2 border-slate-200 rounded-full flex items-center justify-center">
+                    {React.cloneElement(icon, { size: 12, strokeWidth: 2.5 })}
                 </div>
-
-                <div>
-                    <h3 className="text-7xl font-black tracking-tight tabular-nums">{value}</h3>
-                    <p className="text-base font-bold opacity-70 mt-2 uppercase tracking-widest">{subLabel}</p>
-                </div>
+                <span className="text-[12px] font-black uppercase tracking-[0.15em] leading-none">{label}</span>
             </div>
+            <h3 className="text-5xl font-black text-slate-900 leading-tight tracking-tight">{value}</h3>
+            <p className="text-[13px] font-bold text-slate-400 mt-2 uppercase tracking-widest">{subLabel}</p>
         </motion.div>
     );
 };

@@ -20,7 +20,8 @@ import {
     ShieldCheck,
     Cpu,
     GitBranch,
-    Edit
+    Edit,
+    Mail
 } from 'lucide-react';
 
 const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, onUpdateStudent, onSendIndividualSMS }) => {

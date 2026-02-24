@@ -203,7 +203,7 @@ function App() {
 
             {(activeTab === 'dashboard' || activeTab === 'analytics') && <Dashboard students={students} searchQuery={searchQuery} isSearching={isSearching} onSendSMS={handleSendSms} />}
             {activeTab === 'reports' && <ReportPage records={students} />}
-            {(activeTab === 'attendance' || activeTab === 'quick-mark' || activeTab === 'attenditics') && (
+            {(activeTab === 'attendance' || activeTab === 'quick-mark' || activeTab === 'attenditics' || activeTab === 'staff-attendance') && (
                 <div className="max-w-5xl mx-auto">
                     <AttendancePanel
                         students={students}
@@ -213,14 +213,7 @@ function App() {
                     />
                 </div>
             )}
-            {activeTab === 'staff-attendance' && (
-                <StaffAttendanceEntry
-                    students={students}
-                    onStatusChange={handleStatusChange}
-                    onUpdateStudent={handleUpdateStudent}
-                    onSendIndividualSMS={handleSendSms}
-                />
-            )}
+
 
             {activeTab === 'leave' && <LeaveGateway user={currentUser} />}
 

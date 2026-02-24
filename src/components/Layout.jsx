@@ -47,7 +47,7 @@ const Layout = ({ children, activeTab, setActiveTab, logout, user, onDeleteAccou
         ],
         TEACHER: [
             { id: 'staff-dashboard', label: 'Dashboard', icon: <LayoutGrid size={20} /> },
-            { id: 'staff-attendance', label: 'Attendance', icon: <UserCheck size={20} /> },
+            { id: 'attendance', label: 'Attendance', icon: <UserCheck size={20} /> },
             { id: 'leave', label: 'Leave', icon: <ClipboardList size={20} /> },
             { id: 'reports', label: 'Reports', icon: <FileBarChart size={20} /> },
             { id: 'profile', label: 'Profile', icon: <User size={20} /> },
@@ -71,8 +71,8 @@ const Layout = ({ children, activeTab, setActiveTab, logout, user, onDeleteAccou
                             <LayoutGrid size={28} />
                         </div>
                     ) : (
-                        <div style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <div style={{ padding: '10px', background: 'rgba(37, 99, 235, 0.1)', borderRadius: '50%', color: '#3b82f6' }}>
+                        <div style={{ width: '64px', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <div style={{ width: '100%', height: '100%', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '50%', border: '1px solid rgba(59, 130, 246, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6' }}>
                                 <Users size={32} />
                             </div>
                         </div>
