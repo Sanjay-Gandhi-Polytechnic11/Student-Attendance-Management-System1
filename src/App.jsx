@@ -77,18 +77,33 @@ function App() {
         }
     }, [searchQuery]);
 
-    const handleStatusChange = async (id, newStatus) => {
+    const handleStatusChange = async (idOrUser, newStatus) => {
         const time = newStatus === 'Absent' ? '-' : new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         try {
-            await api.updateStudentStatus(id, newStatus, time);
-            setStudents(prev => prev.map(s =>
-                s.id === id ? { ...s, status: newStatus, time } : s
-            ));
+            let targetId = idOrUser;
+
+            // If we received a user object instead of an ID, it means the student needs a record created
+            if (typeof idOrUser === 'object' && idOrUser !== null) {
+                const newStudent = await api.addStudent({
+                    name: idOrUser.username,
+                    roll: idOrUser.rollNumber,
+                    parentPhoneNumber: idOrUser.phoneNumber,
+                    status: newStatus,
+                    time: time
+                });
+                targetId = newStudent.id;
+                setStudents(prev => [...prev, newStudent]);
+            } else {
+                await api.updateStudentStatus(targetId, newStatus, time);
+                setStudents(prev => prev.map(s =>
+                    s.id === targetId ? { ...s, status: newStatus, time } : s
+                ));
+            }
 
             if (newStatus === 'Present') {
-                alert('The Student is Present');
+                alert('the student is present');
             } else if (newStatus === 'Absent') {
-                alert('The Student Is Absent');
+                alert('the student is absent');
             }
         } catch (error) {
             alert('Error updating status: ' + error.message);
@@ -168,7 +183,7 @@ function App() {
                 : (Array.isArray(studentList) ? studentList : [studentList]);
 
             await api.sendSmsToParents(listToSend);
-            alert(`SMS notifications sent successfully to ${listToSend.length} recipients.`);
+            alert('SMS Sent Successfully To The Recipient');
         } catch (error) {
             alert('Failed to send SMS: ' + error.message);
         }

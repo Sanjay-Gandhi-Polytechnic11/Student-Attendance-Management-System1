@@ -506,3 +506,20 @@ body {
     position: relative;
     overflow: hidden;
 }
+
+/* Gradient Utility Components */
+.gradient-indigo {
+    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%) !important;
+}
+
+.gradient-emerald {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+}
+
+.gradient-rose {
+    background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%) !important;
+}
+
+.shadow-premium-indigo { box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.2); }
+.shadow-premium-emerald { box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.2); }
+.shadow-premium-rose { box-shadow: 0 20px 25px -5px rgba(244, 63, 94, 0.2); }

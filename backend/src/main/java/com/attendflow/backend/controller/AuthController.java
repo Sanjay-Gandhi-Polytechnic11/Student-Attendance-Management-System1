@@ -1,7 +1,9 @@
 package com.attendflow.backend.controller;
 
 import com.attendflow.backend.model.User;
+import com.attendflow.backend.model.Student;
 import com.attendflow.backend.repository.UserRepository;
+import com.attendflow.backend.repository.StudentRepository;
 import com.attendflow.backend.service.EmailService;
 import com.attendflow.backend.service.SmsService;
 
@@ -19,6 +21,9 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Autowired
     private EmailService emailService;
@@ -41,12 +46,23 @@ public class AuthController {
         }
         User savedUser = userRepository.save(user);
 
-        // If it's a student, send a welcome SMS to the parent number
-        if ("STUDENT".equals(user.getRole()) && user.getPhoneNumber() != null && !user.getPhoneNumber().isEmpty()) {
-            String message = String.format(
-                    "Welcome to SGPB Portal. %s is now registered for attendance tracking. Registry ID: %s",
-                    user.getUsername(), user.getRollNumber());
-            smsService.sendSms(user.getPhoneNumber(), message);
+        // If it's a student, send a welcome SMS and create a student record
+        if ("STUDENT".equals(user.getRole())) {
+            // Create student entry in the registry
+            Student student = new Student();
+            student.setName(user.getUsername());
+            student.setRoll(user.getRollNumber());
+            student.setParentPhoneNumber(user.getPhoneNumber());
+            student.setStatus("Unknown");
+            student.setTime("-");
+            studentRepository.save(student);
+
+            if (user.getPhoneNumber() != null && !user.getPhoneNumber().isEmpty()) {
+                String message = String.format(
+                        "Welcome to SGPB Portal. %s is now registered for attendance tracking. Registry ID: %s",
+                        user.getUsername(), user.getRollNumber());
+                smsService.sendSms(user.getPhoneNumber(), message);
+            }
         }
 
         return ResponseEntity.ok(savedUser);

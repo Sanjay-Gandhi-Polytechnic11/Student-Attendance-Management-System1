@@ -39,12 +39,19 @@ import {
 } from 'recharts';
 
 const StudentDashboard = ({ user, students = [], onStatusChange, onSendSMS }) => {
+    const [showStatusPicker, setShowStatusPicker] = useState(false);
+
     // Find own record from the students prop
-    const myRecord = students.find(s => 
-        (user?.rollNumber && (s.roll === user.rollNumber || s.registerNumber === user.rollNumber)) ||
-        s.name.toLowerCase().includes(user?.username?.toLowerCase() || '') || 
-        s.roll.toLowerCase().includes(user?.username?.toLowerCase() || '')
-    );
+    const myRecord = students.find(s => {
+        if (!s) return false;
+        const studentRoll = (s.roll || s.registerNumber || '').toString().toLowerCase();
+        const userRoll = (user?.rollNumber || '').toString().toLowerCase();
+        const studentName = (s.name || '').toString().toLowerCase();
+        const userName = (user?.username || '').toString().toLowerCase();
+        
+        return (userRoll && studentRoll === userRoll) || 
+               (userName && (studentName.includes(userName) || studentRoll.includes(userName)));
+    });
 
     // If record found, use its real status, else demo data
     const currentStatus = myRecord?.status || 'Unknown';
@@ -109,9 +116,9 @@ const StudentDashboard = ({ user, students = [], onStatusChange, onSendSMS }) =>
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <span className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest bg-white/5 border border-white/10 px-4 py-2 rounded-full">
+                    <span className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest bg-slate-100 border border-slate-200 px-4 py-2 rounded-full">
                         <ShieldCheck size={14} className="text-emerald-500" />
-                        Identity Verified
+                        ID: {user?.rollNumber || 'SGPB-VERIFIED'}
                     </span>
                 </div>
             </motion.div>
@@ -254,10 +261,7 @@ const StudentDashboard = ({ user, students = [], onStatusChange, onSendSMS }) =>
             {/* 5. INSTITUTIONAL REGISTRY (Image-based redesign) */}
             <motion.div className="px-2" variants={itemVariants}>
                 <div className="bg-white rounded-[40px] p-12 shadow-sm border border-slate-100 relative overflow-hidden group">
-                    {/* Background Shield Motif */}
-                    <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-[2000ms]">
-                        <ShieldCheck size={400} />
-                    </div>
+                    {/* Background Motif Removed for Clarity */}
 
                     <div className="flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
                         {/* Header Section */}
@@ -293,44 +297,69 @@ const StudentDashboard = ({ user, students = [], onStatusChange, onSendSMS }) =>
                         <div className="flex flex-wrap items-center justify-center gap-5">
                             <div className="flex flex-col gap-4">
                                 <div className="flex gap-4">
-                                    {/* MARK PRESENT */}
-                                    <button 
-                                        onClick={() => onStatusChange(myRecord?.id, 'Present')}
-                                        disabled={!myRecord || currentStatus === 'Present'}
-                                        className={`flex items-center gap-3 px-8 py-4 rounded-xl font-black transition-all shadow-xl uppercase tracking-widest text-[11px] ${
-                                            currentStatus === 'Present' 
-                                            ? 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed' 
-                                            : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200 hover:scale-105'
-                                        }`}
-                                    >
-                                        <CheckCircle2 size={18} />
-                                        Mark Present
-                                    </button>
+                                    {(showStatusPicker || currentStatus === 'Unknown') ? (
+                                        <>
+                                            {/* MARK PRESENT */}
+                                            <button 
+                                                onClick={() => {
+                                                    onStatusChange(myRecord?.id || user, 'Present');
+                                                    setShowStatusPicker(false);
+                                                }}
+                                                disabled={currentStatus === 'Present'}
+                                                className={`flex items-center gap-3 px-8 py-4 rounded-xl font-black transition-all shadow-xl uppercase tracking-widest text-[11px] ${
+                                                    currentStatus === 'Present' 
+                                                    ? 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed' 
+                                                    : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200 hover:scale-105 active:scale-95'
+                                                }`}
+                                                style={{ pointerEvents: 'auto', position: 'relative', zIndex: 20 }}
+                                            >
+                                                <CheckCircle2 size={18} />
+                                                Mark Present
+                                            </button>
 
-                                    {/* MARK ABSENT */}
-                                    <button 
-                                        onClick={() => onStatusChange(myRecord?.id, 'Absent')}
-                                        disabled={!myRecord || currentStatus === 'Absent'}
-                                        className={`flex items-center gap-3 px-8 py-4 rounded-xl font-black border-2 transition-all uppercase tracking-widest text-[11px] ${
-                                            currentStatus === 'Absent'
-                                            ? 'bg-slate-50 text-slate-400 border-slate-200 cursor-not-allowed'
-                                            : 'bg-white border-slate-200 text-slate-600 hover:border-rose-500 hover:text-rose-600 hover:scale-105'
-                                        }`}
-                                    >
-                                        <XCircle size={18} />
-                                        Mark Absent
-                                    </button>
+                                            {/* MARK ABSENT */}
+                                            <button 
+                                                onClick={() => {
+                                                    onStatusChange(myRecord?.id || user, 'Absent');
+                                                    setShowStatusPicker(false);
+                                                }}
+                                                disabled={currentStatus === 'Absent'}
+                                                className={`flex items-center gap-3 px-8 py-4 rounded-xl font-black border-2 transition-all uppercase tracking-widest text-[11px] ${
+                                                    currentStatus === 'Absent'
+                                                    ? 'bg-slate-50 text-slate-400 border-slate-200 cursor-not-allowed'
+                                                    : 'bg-white border-slate-200 text-slate-600 hover:border-rose-500 hover:text-rose-600 hover:scale-105 active:scale-95'
+                                                }`}
+                                                style={{ pointerEvents: 'auto', position: 'relative', zIndex: 20 }}
+                                            >
+                                                <XCircle size={18} />
+                                                Mark Absent
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <div className="flex items-center gap-4 bg-slate-50 px-8 py-4 rounded-xl border border-slate-200 shadow-inner">
+                                            <div className="flex flex-col">
+                                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Entry Locked</span>
+                                                <span className="text-[13px] font-bold text-slate-700">Status: {currentStatus}</span>
+                                            </div>
+                                            <Activity size={20} className={currentStatus === 'Present' ? 'text-emerald-500' : 'text-rose-500'} />
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    {/* EDIT STATUS */}
+                                    {/* EDIT STATUS / CANCEL */}
                                     <button 
-                                        onClick={() => onStatusChange(myRecord?.id, 'Late')}
+                                        onClick={() => setShowStatusPicker(!showStatusPicker)}
                                         disabled={!myRecord}
-                                        className="flex items-center gap-3 px-8 py-4 rounded-xl font-black bg-white border-2 border-slate-200 text-slate-600 hover:border-indigo-500 hover:text-indigo-600 transition-all uppercase tracking-widest text-[11px] flex-1"
+                                        className={`flex items-center gap-3 px-8 py-4 rounded-xl font-black transition-all uppercase tracking-widest text-[11px] flex-1 active:scale-95 ${
+                                            showStatusPicker 
+                                            ? 'bg-rose-50 text-rose-600 border-2 border-rose-200' 
+                                            : 'bg-white border-2 border-slate-200 text-slate-600 hover:border-indigo-500 hover:text-indigo-600'
+                                        }`}
+                                        style={{ pointerEvents: 'auto', position: 'relative', zIndex: 20 }}
                                     >
                                         <Edit3 size={18} />
-                                        Edit status
+                                        {showStatusPicker ? 'Cancel Entry' : 'Edit status'}
                                     </button>
 
                                     {/* TRASH */}
@@ -338,10 +367,12 @@ const StudentDashboard = ({ user, students = [], onStatusChange, onSendSMS }) =>
                                         onClick={() => {
                                             if(window.confirm('Clear institutional attendance record?')) {
                                                 onStatusChange(myRecord?.id, 'Unknown');
+                                                setShowStatusPicker(true);
                                             }
                                         }}
                                         disabled={!myRecord || currentStatus === 'Unknown'}
-                                        className="h-14 w-14 rounded-xl bg-white border-2 border-slate-200 text-slate-400 hover:bg-rose-50 hover:border-rose-500 hover:text-rose-500 transition-all flex items-center justify-center group/trash"
+                                        className="h-14 w-14 rounded-xl bg-white border-2 border-slate-200 text-slate-400 hover:bg-rose-50 hover:border-rose-500 hover:text-rose-500 transition-all flex items-center justify-center group/trash active:scale-90"
+                                        style={{ pointerEvents: 'auto', position: 'relative', zIndex: 20 }}
                                     >
                                         <Trash2 size={24} className="group-hover/trash:scale-110 transition-transform" />
                                     </button>
@@ -350,7 +381,8 @@ const StudentDashboard = ({ user, students = [], onStatusChange, onSendSMS }) =>
                                     <button 
                                         onClick={() => myRecord && onSendSMS(myRecord)}
                                         disabled={!myRecord}
-                                        className="flex items-center gap-3 px-8 py-4 rounded-xl font-black bg-white border-2 border-indigo-200 text-indigo-500 hover:bg-indigo-600 hover:text-white transition-all uppercase tracking-widest text-[11px]"
+                                        className="flex items-center gap-3 px-8 py-4 rounded-xl font-black bg-white border-2 border-indigo-200 text-indigo-500 hover:bg-indigo-600 hover:text-white transition-all uppercase tracking-widest text-[11px] active:scale-95"
+                                        style={{ pointerEvents: 'auto', position: 'relative', zIndex: 20 }}
                                     >
                                         <Mail size={18} />
                                         Notify Parents
@@ -360,31 +392,30 @@ const StudentDashboard = ({ user, students = [], onStatusChange, onSendSMS }) =>
                         </div>
                     </div>
                     
-                    {myRecord && (
-                        <div className="mt-12 pt-8 border-t border-slate-50 grid grid-cols-1 md:grid-cols-3 gap-8">
-                            <div className="flex items-center gap-4">
-                                <div className="p-3 bg-slate-50 rounded-xl text-slate-400"><User size={20} /></div>
-                                <div>
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Name of the Student</p>
-                                    <p className="text-sm font-black text-slate-700">{myRecord.name}</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <div className="p-3 bg-slate-50 rounded-xl text-slate-400"><ShieldCheck size={20} /></div>
-                                <div>
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Register Number</p>
-                                    <p className="text-sm font-black text-slate-700 font-mono">{myRecord.roll || myRecord.registerNumber}</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <div className="p-3 bg-slate-50 rounded-xl text-slate-400"><Smartphone size={20} /></div>
-                                <div>
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mobile Number</p>
-                                    <p className="text-sm font-black text-slate-700 font-mono">{myRecord.parentPhoneNumber || 'Unlinked'}</p>
-                                </div>
+                    {/* Profile Summary Footer */}
+                    <div className="mt-12 pt-8 border-t border-slate-50 grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="flex items-center gap-4">
+                            <div className="p-3 bg-slate-50 rounded-xl text-slate-400"><User size={20} /></div>
+                            <div>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Name of the Student</p>
+                                <p className="text-sm font-black text-slate-700">{myRecord?.name || user?.username || 'Registering...'}</p>
                             </div>
                         </div>
-                    )}
+                        <div className="flex items-center gap-4">
+                            <div className="p-3 bg-slate-50 rounded-xl text-slate-400"><ShieldCheck size={20} /></div>
+                            <div>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Register Number</p>
+                                <p className="text-sm font-black text-slate-700 font-mono">{myRecord?.roll || myRecord?.registerNumber || user?.rollNumber || 'TBD'}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <div className="p-3 bg-slate-50 rounded-xl text-slate-400"><Smartphone size={20} /></div>
+                            <div>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mobile Number</p>
+                                <p className="text-sm font-black text-slate-700 font-mono">{myRecord?.parentPhoneNumber || user?.phoneNumber || 'Unlinked'}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </motion.div>
         </motion.div>
@@ -405,9 +436,9 @@ const FilterSelect = ({ label, icon, options }) => (
 
 const PerformanceCard = ({ label, value, subLabel, color, icon, variants }) => {
     const colors = {
-        indigo: "from-indigo-600 to-indigo-800 shadow-indigo-200",
-        emerald: "from-emerald-500 to-emerald-700 shadow-emerald-200",
-        rose: "from-rose-500 to-rose-700 shadow-rose-200"
+        indigo: "gradient-indigo shadow-premium-indigo",
+        emerald: "gradient-emerald shadow-premium-emerald",
+        rose: "gradient-rose shadow-premium-rose"
     };
 
     return (

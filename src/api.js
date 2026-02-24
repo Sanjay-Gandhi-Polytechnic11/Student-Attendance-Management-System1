@@ -155,6 +155,20 @@ export const api = {
             console.error('Send SMS error:', error);
             throw error;
         }
+    },
+    async addStudent(studentData) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/students`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(studentData)
+            });
+            if (!response.ok) throw new Error('Failed to add student');
+            return response.json();
+        } catch (error) {
+            console.error('Add student error:', error);
+            throw error;
+        }
     }
 };
 
