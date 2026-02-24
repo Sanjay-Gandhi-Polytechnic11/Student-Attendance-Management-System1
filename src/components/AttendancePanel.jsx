@@ -15,10 +15,11 @@ import {
     Cpu,
     GitBranch,
     Calendar,
-    Edit
+    Edit,
+    Mail
 } from 'lucide-react';
 
-const AttendancePanel = ({ students, onStatusChange, onUpdateStudent }) => {
+const AttendancePanel = ({ students, onStatusChange, onUpdateStudent, onSendIndividualSMS }) => {
     const [filter, setFilter] = useState('All');
     const [localSearch, setLocalSearch] = useState('');
     const [editingStudent, setEditingStudent] = useState(null);
@@ -229,6 +230,21 @@ const AttendancePanel = ({ students, onStatusChange, onUpdateStudent }) => {
                                         icon={<X size={14} />}
                                         onClick={() => onStatusChange(student.id, 'Absent')}
                                     />
+                                    <button
+                                        onClick={() => {
+                                            if (window.confirm(`Send status SMS for ${student.name}?`)) {
+                                                if (onSendIndividualSMS) {
+                                                    onSendIndividualSMS(student);
+                                                } else {
+                                                    alert(`SMS protocol initiated for ${student.name}: Status ${student.status}`);
+                                                }
+                                            }
+                                        }}
+                                        className="p-3 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-xl hover:bg-indigo-600 hover:text-white transition-all group shadow-sm shadow-indigo-500/10"
+                                        title="Send Status SMS"
+                                    >
+                                        <Mail size={16} className="group-hover:scale-110 transition-transform" />
+                                    </button>
                                 </div>
                             </motion.div>
                         )) : (

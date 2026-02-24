@@ -136,6 +136,7 @@ const HodDashboard = ({ onNavigate, students = [], onSendSMS }) => {
                             <option>Semester II</option>
                             <option>Semester III</option>
                             <option>Semester IV</option>
+                            <option>Semester V</option>
                         </select>
                     </div>
 

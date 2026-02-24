@@ -158,10 +158,11 @@ function App() {
         }
     };
 
-    const handleSendSms = async () => {
+    const handleSendSms = async (studentList = students) => {
         try {
-            await api.sendSmsToParents(students);
-            alert('SMS notifications sent to parents for ' + students.length + ' students.');
+            const listToSend = Array.isArray(studentList) ? studentList : [studentList];
+            await api.sendSmsToParents(listToSend);
+            alert('SMS notifications sent successfully.');
         } catch (error) {
             alert('Failed to send SMS: ' + error.message);
         }
@@ -192,7 +193,7 @@ function App() {
             {activeTab === 'admin-dashboard' && <AdminDashboard users={users} students={students} />}
             {activeTab === 'hod-dashboard' && <HodDashboard onNavigate={(tab) => setActiveTab(tab)} students={students} onSendSMS={handleSendSms} />}
             {activeTab === 'staff-dashboard' && <StaffDashboard onNavigateToAttendance={(tab) => setActiveTab(tab)} students={students} onSendSMS={handleSendSms} />}
-            {activeTab === 'student-dashboard' && <StudentDashboard user={currentUser} students={students} />}
+            {activeTab === 'student-dashboard' && <StudentDashboard user={currentUser} students={students} onStatusChange={handleStatusChange} />}
 
             {(activeTab === 'dashboard' || activeTab === 'analytics') && <Dashboard students={students} searchQuery={searchQuery} isSearching={isSearching} onSendSMS={handleSendSms} />}
             {activeTab === 'reports' && <ReportPage records={students} />}
@@ -202,6 +203,7 @@ function App() {
                         students={students}
                         onStatusChange={handleStatusChange}
                         onUpdateStudent={handleUpdateStudent}
+                        onSendIndividualSMS={handleSendSms}
                     />
                 </div>
             )}
@@ -210,6 +212,7 @@ function App() {
                     students={students}
                     onStatusChange={handleStatusChange}
                     onUpdateStudent={handleUpdateStudent}
+                    onSendIndividualSMS={handleSendSms}
                 />
             )}
 

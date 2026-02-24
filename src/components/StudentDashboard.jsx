@@ -35,7 +35,15 @@ import {
     Line
 } from 'recharts';
 
-const StudentDashboard = ({ user, students = [] }) => {
+const StudentDashboard = ({ user, students = [], onStatusChange }) => {
+    // Find own record from the students prop
+    const myRecord = students.find(s => 
+        s.name.toLowerCase().includes(user?.username?.toLowerCase() || '') || 
+        s.roll.toLowerCase().includes(user?.username?.toLowerCase() || '')
+    );
+
+    // If record found, use its real status, else demo data
+    const currentStatus = myRecord?.status || 'Unknown';
     // In a real app, we would filter 'students' to find the record matching the current user's roll/ID
     // For now, we simulate personal student data
     const myAttendance = {
@@ -109,7 +117,7 @@ const StudentDashboard = ({ user, students = [] }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     <FilterSelect label="Department" icon={<Cpu size={14} />} options={['CS', 'Electrical', 'Mechanical']} />
                     <FilterSelect label="Branch" icon={<GitBranch size={14} />} options={['CSE', 'ECE', 'EEE']} />
-                    <FilterSelect label="Semester" icon={<Calendar size={14} />} options={['Sem I', 'Sem II', 'Sem III']} />
+                    <FilterSelect label="Semester" icon={<Calendar size={14} />} options={['Sem I', 'Sem II', 'Sem III', 'Sem IV', 'Sem V']} />
                     <FilterSelect label="Filter Subject" icon={<BookOpen size={14} />} options={['Algorithms', 'Web Dev', 'IoT']} />
                 </div>
             </motion.div>
@@ -238,6 +246,42 @@ const StudentDashboard = ({ user, students = [] }) => {
                     </div>
                 </motion.div>
             </div>
+
+            {/* 5. ATTENDANCE MARKING PROTOCOL */}
+            <motion.div className="px-2" variants={itemVariants}>
+                <div className="bg-white rounded-[32px] p-10 shadow-sm border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="flex items-center gap-6">
+                        <div className={`w-16 h-16 rounded-[20px] flex items-center justify-center border-2 ${
+                            currentStatus === 'Present' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-slate-50 border-slate-100 text-slate-400'
+                        }`}>
+                            <UserCheck size={32} />
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-black text-slate-800 tracking-tight mb-1">Mark Attendance</h3>
+                            <p className="text-sm text-slate-500 font-medium tracking-tight">
+                                Current Protocol Status: <span className={`font-black uppercase ${currentStatus === 'Present' ? 'text-emerald-500' : 'text-slate-400'}`}>
+                                    {currentStatus}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                        <button 
+                            disabled={currentStatus === 'Present' || !myRecord}
+                            onClick={() => onStatusChange(myRecord.id, 'Present')}
+                            className={`flex items-center gap-3 px-10 py-5 rounded-2xl font-black transition-all shadow-xl uppercase tracking-widest text-[13px] ${
+                                currentStatus === 'Present' 
+                                ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200 shadow-none' 
+                                : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200'
+                            }`}
+                        >
+                            <CheckCircle2 size={20} />
+                            {currentStatus === 'Present' ? 'Registry Logged' : 'Verify My Presence'}
+                        </button>
+                    </div>
+                </div>
+            </motion.div>
         </motion.div>
     );
 };
