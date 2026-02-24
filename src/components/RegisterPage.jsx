@@ -57,20 +57,20 @@ const RegisterPage = ({ onRegister, onSwitchToLogin }) => {
                 transition={{ delay: 0.1 }}
             >
                 <div className="text-center mb-medium">
-                    <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a' }}>Faculty Onboarding</h2>
+                    <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a' }}>Portal Onboarding</h2>
                     <p style={{ color: '#64748b', marginTop: '8px', fontSize: '14px' }}>Institutional Access Provisioning</p>
                 </div>
 
                 <form onSubmit={handleSubmit}>
                     <div className="input-group">
-                        <label className="input-label">Administrative Full Name</label>
+                        <label className="input-label">Full Legal Identification</label>
                         <div style={{ position: 'relative' }}>
                             <User size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
                             <input
                                 type="text"
                                 className="input-field"
                                 style={{ paddingLeft: '48px' }}
-                                placeholder="Prof. Surname Name"
+                                placeholder="Surname Name"
                                 value={fullName}
                                 onChange={(e) => setFullName(e.target.value)}
                                 required
@@ -124,6 +124,7 @@ const RegisterPage = ({ onRegister, onSwitchToLogin }) => {
                                     <option value="TEACHER">Staff Member</option>
                                     <option value="HOD">Dept Head (HOD)</option>
                                     <option value="ADMIN">System Admin</option>
+                                    <option value="STUDENT">Institutional Learner</option>
                                 </select>
                                 <ChevronDown size={16} style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', pointerEvents: 'none' }} />
                             </div>

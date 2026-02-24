@@ -13,6 +13,7 @@ import RegisterPage from './components/RegisterPage';
 import AdminDashboard from './components/AdminDashboard';
 import HodDashboard from './components/HodDashboard';
 import StaffDashboard from './components/StaffDashboard';
+import StudentDashboard from './components/StudentDashboard';
 import ReportPage from './components/ReportPage';
 import PortalSettings from './components/PortalSettings';
 import MemberDirectory from './components/MemberDirectory';
@@ -104,6 +105,9 @@ function App() {
         } else if (user.role === 'HOD') {
             setUserRole('HOD');
             setActiveTab('hod-dashboard');
+        } else if (user.role === 'STUDENT') {
+            setUserRole('Student');
+            setActiveTab('student-dashboard');
         } else {
             setUserRole('Teacher');
             setActiveTab('staff-dashboard');
@@ -154,6 +158,15 @@ function App() {
         }
     };
 
+    const handleSendSms = async () => {
+        try {
+            await api.sendSmsToParents(students);
+            alert('SMS notifications sent to parents for ' + students.length + ' students.');
+        } catch (error) {
+            alert('Failed to send SMS: ' + error.message);
+        }
+    };
+
     if (!isAuthenticated) {
         return authView === 'login' ? (
             <LoginPage
@@ -177,10 +190,11 @@ function App() {
             onDeleteAccount={handleDeleteAccount}
         >
             {activeTab === 'admin-dashboard' && <AdminDashboard users={users} students={students} />}
-            {activeTab === 'hod-dashboard' && <HodDashboard onNavigate={(tab) => setActiveTab(tab)} students={students} />}
-            {activeTab === 'staff-dashboard' && <StaffDashboard onNavigateToAttendance={(tab) => setActiveTab(tab)} students={students} />}
+            {activeTab === 'hod-dashboard' && <HodDashboard onNavigate={(tab) => setActiveTab(tab)} students={students} onSendSMS={handleSendSms} />}
+            {activeTab === 'staff-dashboard' && <StaffDashboard onNavigateToAttendance={(tab) => setActiveTab(tab)} students={students} onSendSMS={handleSendSms} />}
+            {activeTab === 'student-dashboard' && <StudentDashboard user={currentUser} students={students} />}
 
-            {(activeTab === 'dashboard' || activeTab === 'analytics') && <Dashboard students={students} searchQuery={searchQuery} isSearching={isSearching} />}
+            {(activeTab === 'dashboard' || activeTab === 'analytics') && <Dashboard students={students} searchQuery={searchQuery} isSearching={isSearching} onSendSMS={handleSendSms} />}
             {activeTab === 'reports' && <ReportPage records={students} />}
             {(activeTab === 'attendance' || activeTab === 'quick-mark' || activeTab === 'attenditics') && (
                 <div className="max-w-5xl mx-auto">

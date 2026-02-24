@@ -21,11 +21,11 @@ public class DataInitializer {
             // Initial Students
             if (studentRepository.count() == 0) {
                 studentRepository.saveAll(Arrays.asList(
-                        new Student(null, "Alice Johnson", "CS001", "Grade 10", "Present", "08:45 AM"),
-                        new Student(null, "Bob Smith", "CS002", "Grade 10", "Present", "08:50 AM"),
-                        new Student(null, "Charlie Brown", "CS003", "Grade 10", "Late", "09:15 AM"),
-                        new Student(null, "Diana Prince", "CS004", "Grade 10", "Absent", "-"),
-                        new Student(null, "Ethan Hunt", "CS005", "Grade 10", "Present", "08:40 AM")));
+                        new Student(null, "Alice Johnson", "CS001", "Grade 10", "Present", "08:45 AM", "+1234567890"),
+                        new Student(null, "Bob Smith", "CS002", "Grade 10", "Present", "08:50 AM", "+1234567891"),
+                        new Student(null, "Charlie Brown", "CS003", "Grade 10", "Late", "09:15 AM", "+1234567892"),
+                        new Student(null, "Diana Prince", "CS004", "Grade 10", "Absent", "-", "+1234567893"),
+                        new Student(null, "Ethan Hunt", "CS005", "Grade 10", "Present", "08:40 AM", "+1234567894")));
                 System.out.println("Inserted 5 default students.");
             } else {
                 System.out.println("Students already exist. Skipping student initialization.");

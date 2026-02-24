@@ -2,6 +2,8 @@ package com.attendflow.backend.controller;
 
 import com.attendflow.backend.model.Student;
 import com.attendflow.backend.repository.StudentRepository;
+import com.attendflow.backend.service.SmsService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,9 @@ public class StudentController {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private SmsService smsService;
 
     @GetMapping
     public List<Student> getAllStudents() {
@@ -44,6 +49,7 @@ public class StudentController {
                     student.setName(studentDetails.getName());
                     student.setRoll(studentDetails.getRoll());
                     student.setStudentClass(studentDetails.getStudentClass());
+                    student.setParentPhoneNumber(studentDetails.getParentPhoneNumber());
                     if (studentDetails.getStatus() != null)
                         student.setStatus(studentDetails.getStatus());
                     if (studentDetails.getTime() != null)
@@ -51,6 +57,20 @@ public class StudentController {
                     return ResponseEntity.ok(studentRepository.save(student));
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/send-sms")
+    public ResponseEntity<String> sendSmsToParents(@RequestBody List<Student> students) {
+        for (Student student : students) {
+            String phoneNumber = student.getParentPhoneNumber();
+            if (phoneNumber != null && !phoneNumber.isEmpty()) {
+                String status = student.getStatus() != null ? student.getStatus() : "Unknown";
+                String message = String.format("Dear Parent, your child %s (Roll: %s) is %s today.",
+                        student.getName(), student.getRoll(), status);
+                smsService.sendSms(phoneNumber, message);
+            }
+        }
+        return ResponseEntity.ok("SMS notifications sent successfully");
     }
 
     @PostMapping

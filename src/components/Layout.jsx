@@ -10,6 +10,7 @@ import {
     ShieldCheck,
     Settings,
     UserCheck,
+    Calendar,
     BookOpen,
     Trash2,
     User
@@ -50,6 +51,12 @@ const Layout = ({ children, activeTab, setActiveTab, logout, user, onDeleteAccou
             { id: 'leave', label: 'Leave', icon: <ClipboardList size={20} /> },
             { id: 'reports', label: 'Reports', icon: <FileBarChart size={20} /> },
             { id: 'profile', label: 'Profile', icon: <User size={20} /> },
+        ],
+        STUDENT: [
+            { id: 'student-dashboard', label: 'Student Portal', icon: <LayoutGrid size={20} /> },
+            { id: 'schedule', label: 'Class Schedule', icon: <Calendar size={20} /> },
+            { id: 'leave', label: 'Leave Application', icon: <ClipboardList size={20} /> },
+            { id: 'profile', label: 'My Identity', icon: <User size={20} /> },
         ]
     };
 

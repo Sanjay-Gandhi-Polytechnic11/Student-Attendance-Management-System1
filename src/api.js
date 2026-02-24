@@ -141,6 +141,20 @@ export const api = {
             console.error('Search students error:', error);
             throw error;
         }
+    },
+    async sendSmsToParents(students) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/students/send-sms`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(students)
+            });
+            if (!response.ok) throw new Error('Failed to send SMS');
+            return response.text();
+        } catch (error) {
+            console.error('Send SMS error:', error);
+            throw error;
+        }
     }
 };
 

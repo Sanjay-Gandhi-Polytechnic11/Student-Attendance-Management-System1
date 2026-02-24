@@ -74,8 +74,8 @@ const LoginPage = ({ onLogin, onSwitchToRegister }) => {
                             exit={{ opacity: 0, x: 20 }}
                         >
                             <div className="text-center mb-medium">
-                                <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a' }}>Staff Portal Access</h2>
-                                <p style={{ color: '#64748b', marginTop: '8px', fontSize: '14px' }}>Establish a secure administrative session</p>
+                                <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a' }}>Portal Access</h2>
+                                <p style={{ color: '#64748b', marginTop: '8px', fontSize: '14px' }}>Establish a secure institutional session</p>
                             </div>
 
                             <form onSubmit={handleSubmit}>
@@ -135,7 +135,7 @@ const LoginPage = ({ onLogin, onSwitchToRegister }) => {
 
                             <div className="text-center mt-large" style={{ borderTop: '1px solid #f1f5f9', paddingTop: '24px' }}>
                                 <p style={{ fontSize: '14px', color: '#64748b' }}>
-                                    New faculty member? {' '}
+                                    New to the portal? {' '}
                                     <button
                                         onClick={onSwitchToRegister}
                                         style={{ color: '#2563eb', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer' }}

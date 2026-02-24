@@ -36,7 +36,7 @@ import {
 } from 'recharts';
 import { generateCSV, generateTextReport, downloadFile } from '../utils/reportUtils';
 
-const HodDashboard = ({ onNavigate, students = [] }) => {
+const HodDashboard = ({ onNavigate, students = [], onSendSMS }) => {
     // Live calculated data from students prop
     const totalStudentsCount = students.length || 120;
     const presentCount = students.filter(s => s.status === 'Present').length || 100;
@@ -259,6 +259,24 @@ const HodDashboard = ({ onNavigate, students = [] }) => {
                     </div>
                 </motion.div>
             </div>
+
+            {/* 4. STRATEGIC ACTIONS */}
+            <motion.div className="px-2" variants={itemVariants}>
+                <div className="bg-white rounded-[32px] p-8 shadow-sm border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <h3 className="text-xl font-bold text-slate-900 mb-1">Institutional Notifications</h3>
+                        <p className="text-sm text-slate-500 font-medium">Broadcast attendance status to all registered parent contact nodes.</p>
+                    </div>
+
+                    <button 
+                        onClick={onSendSMS}
+                        className="flex items-center gap-3 px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold transition-all shadow-lg shadow-indigo-200 group"
+                    >
+                        <Mail size={20} className="group-hover:scale-110 transition-transform" />
+                        Send SMS Notifications
+                    </button>
+                </div>
+            </motion.div>
         </motion.div>
     );
 };

@@ -21,4 +21,5 @@ public class Student {
     private String studentClass;
     private String status;
     private String time;
+    private String parentPhoneNumber;
 }

@@ -44,7 +44,7 @@ const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, 
     const [stats, setStats] = useState({ present: 0, absent: 0, total: 0 });
 
     const [editingStudent, setEditingStudent] = useState(null);
-    const [editFormData, setEditFormData] = useState({ name: '', roll: '', studentClass: '', status: 'Present' });
+    const [editFormData, setEditFormData] = useState({ name: '', roll: '', studentClass: '', status: 'Present', parentPhoneNumber: '' });
 
     useEffect(() => {
         setStudents(initialStudents);
@@ -429,10 +429,11 @@ const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, 
                                                             setEditingStudent(s);
                                                             setEditFormData({
                                                                 name: s.name,
-                                                                roll: s.roll || s.registerNumber,
-                                                                studentClass: s.studentClass || s.class || 'CSE-A',
-                                                                status: s.status || 'Present'
-                                                            });
+                                                                    roll: s.roll || s.registerNumber,
+                                                                    studentClass: s.studentClass || s.class || 'CSE-A',
+                                                                    status: s.status || 'Present',
+                                                                    parentPhoneNumber: s.parentPhoneNumber || ''
+                                                                });
                                                         }}
                                                         className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-slate-100 rounded-lg transition-all"
                                                         title="Edit Details"
@@ -584,6 +585,16 @@ const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, 
                                         <option value="Late">Late</option>
                                     </select>
                                 </div>
+                                <div className="space-y-2 col-span-2">
+                                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Parent Contact Node (SMS)</label>
+                                    <input
+                                        type="text"
+                                        placeholder="+1 234 567 890"
+                                        value={editFormData.parentPhoneNumber}
+                                        onChange={(e) => setEditFormData({ ...editFormData, parentPhoneNumber: e.target.value })}
+                                        className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white font-mono font-bold outline-none focus:border-indigo-500 transition-all"
+                                    />
+                                </div>
                             </div>
 
                             <div className="flex gap-4 mt-12">
@@ -599,7 +610,8 @@ const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, 
                                             name: editFormData.name,
                                             roll: editFormData.roll,
                                             studentClass: editFormData.studentClass,
-                                            status: editFormData.status
+                                            status: editFormData.status,
+                                            parentPhoneNumber: editFormData.parentPhoneNumber
                                         });
                                         setEditingStudent(null);
                                     }}

@@ -36,7 +36,7 @@ import {
 } from 'recharts';
 import { generateCSV, generateTextReport, downloadFile } from '../utils/reportUtils';
 
-const StaffDashboard = ({ onNavigateToAttendance, students = [] }) => {
+const StaffDashboard = ({ onNavigateToAttendance, students = [], onSendSMS }) => {
     // Analytics Extraction from live registry
     const totalCount = students.length || 0;
     const presentToday = students.filter(s => s.status === 'Present').length || 0;
@@ -250,6 +250,13 @@ const StaffDashboard = ({ onNavigateToAttendance, students = [] }) => {
                     icon={<Download size={20} />}
                     onClick={() => downloadFile(generateCSV(students), 'Registry_Report.csv')}
                     color="emerald"
+                />
+                <ActionCard
+                    title="Send SMS"
+                    desc="Notify parents of attendance"
+                    icon={<Mail size={20} />}
+                    onClick={onSendSMS}
+                    color="amber"
                 />
                 <ActionCard
                     title="System Profile"
