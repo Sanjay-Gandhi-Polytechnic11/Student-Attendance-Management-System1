@@ -115,8 +115,16 @@ const StudentDashboard = ({ user, students = [], onStatusChange, onSendSMS }) =>
                     </p>
                 </div>
 
-                <div className="flex items-center gap-3">
-                    <span className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest bg-slate-100 border border-slate-200 px-4 py-2 rounded-full">
+                <div className="flex items-center gap-4">
+                    <a 
+                        href="https://dtek.karnataka.gov.in/52/c-20-syllabus/en" 
+                        className="flex items-center gap-3 text-[10px] font-black text-white uppercase tracking-widest bg-indigo-600 border border-indigo-700 px-6 py-2.5 rounded-full hover:bg-slate-800 transition-all shadow-lg active:scale-95 cursor-pointer relative z-50 no-underline"
+                        style={{ display: 'flex', pointerEvents: 'auto' }}
+                    >
+                        <Download size={14} className="group-hover:bounce-y" />
+                        Download Syllabus
+                    </a>
+                    <span className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest bg-slate-100 border border-slate-200 px-4 py-2.5 rounded-full">
                         <ShieldCheck size={14} className="text-emerald-500" />
                         ID: {user?.rollNumber || 'SGPB-VERIFIED'}
                     </span>
