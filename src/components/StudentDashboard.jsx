@@ -18,7 +18,9 @@ import {
     CheckCircle2,
     XCircle,
     Info,
-    Layout
+    Layout,
+    Trash2,
+    Edit3
 } from 'lucide-react';
 import {
     BarChart,
@@ -247,38 +249,92 @@ const StudentDashboard = ({ user, students = [], onStatusChange }) => {
                 </motion.div>
             </div>
 
-            {/* 5. ATTENDANCE MARKING PROTOCOL */}
+            {/* 5. ATTENDANCE INTERACTION REGISTRY */}
             <motion.div className="px-2" variants={itemVariants}>
-                <div className="bg-white rounded-[32px] p-10 shadow-sm border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div className="flex items-center gap-6">
-                        <div className={`w-16 h-16 rounded-[20px] flex items-center justify-center border-2 ${
-                            currentStatus === 'Present' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-slate-50 border-slate-100 text-slate-400'
-                        }`}>
-                            <UserCheck size={32} />
-                        </div>
-                        <div>
-                            <h3 className="text-xl font-black text-slate-800 tracking-tight mb-1">Mark Attendance</h3>
-                            <p className="text-sm text-slate-500 font-medium tracking-tight">
-                                Current Protocol Status: <span className={`font-black uppercase ${currentStatus === 'Present' ? 'text-emerald-500' : 'text-slate-400'}`}>
-                                    {currentStatus}
-                                </span>
-                            </p>
-                        </div>
+                <div className="bg-white rounded-[40px] p-12 shadow-sm border border-slate-100 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-1000">
+                        <ShieldCheck size={200} />
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <button 
-                            disabled={currentStatus === 'Present' || !myRecord}
-                            onClick={() => onStatusChange(myRecord.id, 'Present')}
-                            className={`flex items-center gap-3 px-10 py-5 rounded-2xl font-black transition-all shadow-xl uppercase tracking-widest text-[13px] ${
-                                currentStatus === 'Present' 
-                                ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200 shadow-none' 
-                                : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200'
-                            }`}
-                        >
-                            <CheckCircle2 size={20} />
-                            {currentStatus === 'Present' ? 'Registry Logged' : 'Verify My Presence'}
-                        </button>
+                    <div className="flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
+                        <div className="flex items-center gap-8">
+                            <div className={`w-24 h-24 rounded-[32px] flex items-center justify-center border-4 shadow-2xl transition-all duration-500 ${
+                                currentStatus === 'Present' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 
+                                currentStatus === 'Absent' ? 'bg-rose-50 border-rose-100 text-rose-600' :
+                                'bg-slate-50 border-slate-100 text-slate-400'
+                            }`}>
+                                {currentStatus === 'Present' ? <UserCheck size={48} /> : 
+                                 currentStatus === 'Absent' ? <XCircle size={48} /> : 
+                                 <Activity size={48} />}
+                            </div>
+                            <div>
+                                <h3 className="text-3xl font-black text-slate-800 tracking-tight mb-2 italic">Institutional <span className="text-indigo-600">Registry</span></h3>
+                                <div className="flex items-center gap-3">
+                                    <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">Current Node Status</span>
+                                    <span className={`text-[11px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full ${
+                                        currentStatus === 'Present' ? 'bg-emerald-500 text-white' : 
+                                        currentStatus === 'Absent' ? 'bg-rose-500 text-white' : 
+                                        'bg-slate-300 text-slate-700'
+                                    }`}>
+                                        {currentStatus}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center justify-center gap-4">
+                            {/* MARK PRESENT */}
+                            <button 
+                                onClick={() => onStatusChange(myRecord.id, 'Present')}
+                                disabled={!myRecord || currentStatus === 'Present'}
+                                className={`group flex items-center gap-3 px-8 py-5 rounded-[24px] font-black transition-all shadow-xl uppercase tracking-widest text-[11px] ${
+                                    currentStatus === 'Present' 
+                                    ? 'bg-emerald-50 text-emerald-400 border border-emerald-100 cursor-not-allowed grayscale' 
+                                    : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200'
+                                }`}
+                            >
+                                <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
+                                Mark Present
+                            </button>
+
+                            {/* MARK ABSENT */}
+                            <button 
+                                onClick={() => onStatusChange(myRecord.id, 'Absent')}
+                                disabled={!myRecord || currentStatus === 'Absent'}
+                                className={`group flex items-center gap-3 px-8 py-5 rounded-[24px] font-black transition-all shadow-xl uppercase tracking-widest text-[11px] ${
+                                    currentStatus === 'Absent' 
+                                    ? 'bg-rose-50 text-rose-400 border border-rose-100 cursor-not-allowed grayscale' 
+                                    : 'bg-slate-100 hover:bg-rose-600 hover:text-white text-slate-600'
+                                }`}
+                            >
+                                <XCircle size={18} className="group-hover:scale-110 transition-transform" />
+                                Mark Absent
+                            </button>
+
+                            {/* EDIT STATUS (Essentially just enabling re-selection) */}
+                            <button 
+                                onClick={() => onStatusChange(myRecord.id, 'Late')}
+                                disabled={!myRecord}
+                                className="group flex items-center gap-3 px-8 py-5 rounded-[24px] font-black bg-white border-2 border-slate-100 text-slate-500 hover:border-amber-400 hover:text-amber-500 transition-all uppercase tracking-widest text-[11px]"
+                            >
+                                <Edit3 size={18} />
+                                Edit status
+                            </button>
+
+                            {/* DELETE / CLEAR */}
+                            <button 
+                                onClick={() => {
+                                    if(window.confirm('Delete this attendance entry?')) {
+                                        onStatusChange(myRecord.id, 'Unknown');
+                                    }
+                                }}
+                                disabled={!myRecord || currentStatus === 'Unknown'}
+                                className="p-5 rounded-[24px] bg-white border-2 border-slate-100 text-slate-400 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-500 transition-all group"
+                                title="Delete Entry"
+                            >
+                                <Trash2 size={24} className="group-hover:rotate-12 transition-transform" />
+                            </button>
+                        </div>
                     </div>
                 </div>
             </motion.div>
