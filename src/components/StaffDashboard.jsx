@@ -24,16 +24,13 @@ import {
     Mail
 } from 'lucide-react';
 import {
-    BarChart,
-    Bar,
+    AreaChart,
+    Area,
     XAxis,
     YAxis,
     CartesianGrid,
     Tooltip,
     ResponsiveContainer,
-    PieChart,
-    Pie,
-    Cell
 } from 'recharts';
 import { generateCSV, generateTextReport, downloadFile } from '../utils/reportUtils';
 
@@ -42,15 +39,18 @@ const StaffDashboard = ({ onNavigateToAttendance, students = [], onSendSMS }) =>
     const totalCount = students.length || 0;
     const presentToday = students.filter(s => s.status === 'Present').length || 0;
     const absentToday = students.filter(s => s.status === 'Absent').length || 0;
+    const onLeaveCount = students.filter(s => s.status === 'Late' || s.status === 'Leave').length || 0;
     const attendancePercentage = totalCount > 0 ? Math.round((presentToday / totalCount) * 100) : 0;
 
-    // Monthly Trend Analysis (Simulated for high-fidelity visual)
+    // Simulated wave data for the area chart
     const trendData = [
-        { day: 'Mon', value: 85 },
-        { day: 'Tue', value: 92 },
-        { day: 'Wed', value: 88 },
-        { day: 'Thu', value: 95 },
-        { day: 'Fri', value: 82 },
+        { name: 'Mon', value: 45 },
+        { name: 'Tue', value: 72 },
+        { name: 'Wed', value: 68 },
+        { name: 'Thu', value: 85 },
+        { name: 'Fri', value: 82 },
+        { name: 'Sat', value: 55 },
+        { name: 'Sun', value: 75 },
     ];
 
     const containerVariants = {
@@ -72,146 +72,173 @@ const StaffDashboard = ({ onNavigateToAttendance, students = [], onSendSMS }) =>
 
     return (
         <motion.div
-            className="space-y-10 pb-12"
+            className="space-y-8 pb-12"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
         >
-            {/* 1. INSTITUTIONAL HEADER */}
-            <motion.div variants={itemVariants} className="px-2 space-y-1">
-                <h1 className="text-4xl font-black text-slate-900 tracking-tight">
-                    Staff Command Center
-                </h1>
-                <div className="flex flex-col gap-1 text-slate-500 font-bold">
-                    <p className="flex items-center gap-2 text-sm">
-                        <Cpu size={16} />
-                        Operational analytics and personnel registry oversight.
-                    </p>
-                    <p className="text-sm">Real-time Sync Active</p>
-                </div>
-            </motion.div>
-
-            {/* 2. INTELLIGENCE GRID - Vertical Minimalist Design */}
-            <div className="flex flex-col gap-12 px-2">
+            {/* 1. TOP STATS GRID - Horizontal Design */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-2">
                 <OperationalCard
-                    icon={<Users size={60} strokeWidth={1.5} />}
-                    label="Active Registry"
-                    value={totalCount}
-                    subLabel="Total Students"
-                    variants={itemVariants}
-                />
-                <OperationalCard
-                    icon={<CheckCircle2 size={60} strokeWidth={1.5} />}
-                    label="Attendance Quota"
+                    icon={<CalendarDays className="text-blue-600" size={24} />}
+                    label="Verified Present"
                     value={presentToday}
-                    subLabel="Present Personnel"
+                    trend="+2.4%"
+                    trendColor="text-emerald-500"
                     variants={itemVariants}
                 />
                 <OperationalCard
-                    icon={<AlertCircle size={60} strokeWidth={1.5} />}
-                    label="Missing Entries"
+                    icon={<Users className="text-indigo-600" size={24} />}
+                    label="Absent Records"
                     value={absentToday}
-                    subLabel="Absent / Pending"
+                    trend="-1.2%"
+                    trendColor="text-rose-500"
+                    variants={itemVariants}
+                />
+                <OperationalCard
+                    icon={<BadgeCheck className="text-sky-600" size={24} />}
+                    label="Faculty on Leave"
+                    value={onLeaveCount}
+                    trend="Stable"
+                    trendColor="text-slate-400"
+                    variants={itemVariants}
+                />
+                <OperationalCard
+                    icon={<Activity className="text-blue-500" size={24} />}
+                    label="Total Enrollment"
+                    value={totalCount}
+                    trend="+12"
+                    trendColor="text-emerald-500"
                     variants={itemVariants}
                 />
             </div>
 
-            {/* 3. ANALYTICS HUB */}
+            {/* 2. MAIN ANALYTICS HUB - Area Chart */}
             <motion.div className="bg-white border border-slate-100 rounded-[32px] overflow-hidden shadow-sm" variants={itemVariants}>
-                <div className="p-8 border-b border-slate-50 flex items-center justify-between bg-slate-50/30">
-                    <div className="flex items-center gap-4">
-                        <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
-                        <h3 className="text-lg font-black text-slate-800 uppercase tracking-[0.2em]">Institutional Stability Data</h3>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <button className="p-2 text-slate-300 hover:text-indigo-600 transition-all"><RefreshCw size={18} /></button>
+                <div className="p-8 border-b border-slate-50 flex flex-col gap-1 items-start">
+                    <h3 className="text-xl font-black text-slate-900 tracking-tight">Operational Attendance Analytics</h3>
+                    <div className="flex items-center gap-1">
+                         <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                         <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                         <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
                     </div>
                 </div>
 
-                <div className="p-10 grid grid-cols-1 lg:grid-cols-12 gap-12">
-                    {/* Donut Analytics */}
-                    <div className="lg:col-span-5 flex flex-col items-center justify-center space-y-8 border-r border-slate-100 pr-12">
-                        <div className="relative w-full aspect-square max-w-[280px]">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <PieChart>
-                                    <Pie
-                                        data={[
-                                            { name: 'Present', value: presentToday || 1 },
-                                            { name: 'Absent', value: absentToday || 0 },
-                                        ]}
-                                        innerRadius={85}
-                                        outerRadius={110}
-                                        paddingAngle={8}
-                                        dataKey="value"
-                                        startAngle={90}
-                                        endAngle={450}
-                                        stroke="none"
-                                    >
-                                        <Cell fill="#4f46e5" />
-                                        <Cell fill="#f43f5e" />
-                                    </Pie>
-                                </PieChart>
-                            </ResponsiveContainer>
-                            <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                                <span className="text-6xl font-black text-slate-800 tabular-nums">{attendancePercentage}%</span>
-                                <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest mt-1">Total Efficiency</span>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-8 w-full">
-                            <div className="text-center p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                                <p className="text-[12px] font-black text-slate-400 uppercase tracking-widest mb-1">Present Status</p>
-                                <p className="text-2xl font-black text-slate-800">{presentToday}</p>
-                            </div>
-                            <div className="text-center p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                                <p className="text-[12px] font-black text-slate-400 uppercase tracking-widest mb-1">Absent Status</p>
-                                <p className="text-2xl font-black text-slate-800">{absentToday}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Trend Analytics */}
-                    <div className="lg:col-span-7 flex flex-col space-y-8">
-                        <div>
-                            <h4 className="text-base font-black text-slate-800 uppercase tracking-widest mb-2">Weekly Performance Trend</h4>
-                            <p className="text-sm text-slate-400 font-medium">Historical data tracking for the current cycle.</p>
-                        </div>
-
-                        <div className="h-[300px] w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={trendData} margin={{ top: 20, right: 20, left: -20, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                                    <XAxis
-                                        dataKey="day"
-                                        stroke="#94a3b8"
-                                        fontSize={11}
-                                        fontWeight={700}
-                                        tickLine={false}
-                                        axisLine={false}
-                                        dy={10}
-                                    />
-                                    <YAxis
-                                        stroke="#94a3b8"
-                                        fontSize={11}
-                                        fontWeight={700}
-                                        tickLine={false}
-                                        axisLine={false}
-                                    />
-                                    <Tooltip
-                                        cursor={{ fill: 'rgba(79, 70, 229, 0.05)' }}
-                                        contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', fontWeight: 'bold' }}
-                                    />
-                                    <Bar dataKey="value" fill="#4f46e5" radius={[8, 8, 8, 8]} barSize={45}>
-                                        {trendData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={index === 3 ? '#4f46e5' : '#e2e8f0'} />
-                                        ))}
-                                    </Bar>
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
+                <div className="p-8">
+                    <div className="h-[400px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={trendData}>
+                                <defs>
+                                    <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.1}/>
+                                        <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}/>
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f8fafc" />
+                                <XAxis 
+                                    dataKey="name" 
+                                    axisLine={false} 
+                                    tickLine={false} 
+                                    tick={{fill: '#94a3b8', fontSize: 12, fontWeight: 600}} 
+                                    dy={10}
+                                />
+                                <YAxis 
+                                    axisLine={false} 
+                                    tickLine={false} 
+                                    tick={{fill: '#94a3b8', fontSize: 12, fontWeight: 600}} 
+                                    dx={-10}
+                                    ticks={[0, 25, 50, 75, 100]}
+                                />
+                                <Tooltip 
+                                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
+                                />
+                                <Area 
+                                    type="monotone" 
+                                    dataKey="value" 
+                                    stroke="#4f46e5" 
+                                    strokeWidth={3}
+                                    fillOpacity={1} 
+                                    fill="url(#colorValue)" 
+                                />
+                            </AreaChart>
+                        </ResponsiveContainer>
                     </div>
                 </div>
             </motion.div>
+
+            {/* 3. LIVE FEED SECTION */}
+            <motion.div variants={itemVariants} className="px-2">
+                <h3 className="text-2xl font-black text-slate-800 tracking-tight mb-6">Live Feed</h3>
+            </motion.div>
+
+            {/* 4. ACTION PROTOCOLS */}
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 px-2">
+                <ActionCard
+                    title="Start Ledger"
+                    desc="Open entry"
+                    icon={<PlayCircle size={20} />}
+                    onClick={() => onNavigateToAttendance('attendance')}
+                    color="indigo"
+                />
+                <ActionCard
+                    title="Review Leaves"
+                    desc="Applications"
+                    icon={<BadgeCheck size={20} />}
+                    onClick={() => onNavigateToAttendance('leave')}
+                    color="amber"
+                />
+                <ActionCard
+                    title="Reports"
+                    desc="Generate"
+                    icon={<FileText size={20} />}
+                    onClick={() => onNavigateToAttendance('reports')}
+                    color="rose"
+                />
+                <ActionCard
+                    title="Export"
+                    desc="Download CSV"
+                    icon={<Download size={20} />}
+                    onClick={() => downloadFile(generateCSV(students), 'Registry_Report.csv')}
+                    color="emerald"
+                />
+                <ActionCard
+                    title="Send SMS"
+                    desc="Notify"
+                    icon={<Mail size={20} />}
+                    onClick={onSendSMS}
+                    color="amber"
+                />
+                <ActionCard
+                    title="Profile"
+                    desc="Credentials"
+                    icon={<Users size={20} />}
+                    onClick={() => onNavigateToAttendance('profile')}
+                    color="slate"
+                />
+            </div>
+        </motion.div>
+    );
+};
+
+const OperationalCard = ({ icon, label, value, trend, trendColor, variants }) => {
+    return (
+        <motion.div
+            variants={variants}
+            className="bg-white border border-slate-100 rounded-[28px] p-6 flex items-center gap-5 shadow-sm"
+        >
+            <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center">
+                {icon}
+            </div>
+            <div>
+                <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-black text-slate-900">{value}</span>
+                    <span className={`text-[11px] font-black ${trendColor}`}>{trend}</span>
+                </div>
+                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{label}</p>
+            </div>
+        </motion.div>
+    );
+};
 
             {/* 4. ACTION PROTOCOLS */}
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 px-2">
