@@ -41,6 +41,7 @@ import {
 const StudentDashboard = ({ user, students = [], onStatusChange, onSendSMS }) => {
     // Find own record from the students prop
     const myRecord = students.find(s => 
+        (user?.rollNumber && (s.roll === user.rollNumber || s.registerNumber === user.rollNumber)) ||
         s.name.toLowerCase().includes(user?.username?.toLowerCase() || '') || 
         s.roll.toLowerCase().includes(user?.username?.toLowerCase() || '')
     );
@@ -250,105 +251,112 @@ const StudentDashboard = ({ user, students = [], onStatusChange, onSendSMS }) =>
                 </motion.div>
             </div>
 
-            {/* 5. ATTENDANCE INTERACTION REGISTRY */}
+            {/* 5. INSTITUTIONAL REGISTRY (Image-based redesign) */}
             <motion.div className="px-2" variants={itemVariants}>
                 <div className="bg-white rounded-[40px] p-12 shadow-sm border border-slate-100 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none group-hover:scale-110 transition-transform duration-1000">
-                        <ShieldCheck size={200} />
+                    {/* Background Shield Motif */}
+                    <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-[2000ms]">
+                        <ShieldCheck size={400} />
                     </div>
 
                     <div className="flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
-                        <div className="flex items-center gap-8">
-                            <div className={`w-24 h-24 rounded-[32px] flex items-center justify-center border-4 shadow-2xl transition-all duration-500 ${
-                                currentStatus === 'Present' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 
-                                currentStatus === 'Absent' ? 'bg-rose-50 border-rose-100 text-rose-600' :
-                                'bg-slate-50 border-slate-100 text-slate-400'
-                            }`}>
-                                {currentStatus === 'Present' ? <UserCheck size={48} /> : 
-                                 currentStatus === 'Absent' ? <XCircle size={48} /> : 
-                                 <Activity size={48} />}
+                        {/* Header Section */}
+                        <div className="flex items-center gap-10">
+                            <div className="w-28 h-28 rounded-[36px] bg-slate-50 flex items-center justify-center border border-slate-100 shadow-sm relative group/logo overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover/logo:opacity-100 transition-opacity" />
+                                <Activity size={56} className="text-slate-300 relative z-10" />
                             </div>
+                            
                             <div>
-                                <h3 className="text-3xl font-black text-slate-800 tracking-tight mb-2 italic">Institutional <span className="text-indigo-600">Registry</span></h3>
-                                <div className="flex items-center gap-3">
-                                    <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">Current Node Status</span>
-                                    <span className={`text-[11px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full ${
-                                        currentStatus === 'Present' ? 'bg-emerald-500 text-white' : 
-                                        currentStatus === 'Absent' ? 'bg-rose-500 text-white' : 
-                                        'bg-slate-300 text-slate-700'
-                                    }`}>
-                                        {currentStatus}
+                                <h3 className="text-4xl font-black text-slate-800 tracking-tight mb-3">
+                                    Institutional <br />
+                                    <span className="text-indigo-600">Registry</span>
+                                </h3>
+                                <div className="flex flex-col gap-2">
+                                    <span className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                                        Current Node Status
                                     </span>
+                                    <div className="flex items-center gap-3">
+                                        <span className={`text-[12px] font-black uppercase tracking-[0.15em] px-5 py-2 rounded-full border ${
+                                            currentStatus === 'Present' ? 'bg-emerald-500 text-white border-emerald-400 shadow-lg shadow-emerald-200' : 
+                                            currentStatus === 'Absent' ? 'bg-rose-500 text-white border-rose-400 shadow-lg shadow-rose-200' : 
+                                            'bg-slate-200 text-slate-600 border-slate-300'
+                                        }`}>
+                                            {currentStatus || 'UNKNOWN'}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex flex-wrap items-center justify-center gap-4">
-                            {/* MARK PRESENT */}
-                            <button 
-                                onClick={() => onStatusChange(myRecord.id, 'Present')}
-                                disabled={!myRecord || currentStatus === 'Present'}
-                                className={`group flex items-center gap-3 px-8 py-5 rounded-[24px] font-black transition-all shadow-xl uppercase tracking-widest text-[11px] ${
-                                    currentStatus === 'Present' 
-                                    ? 'bg-emerald-50 text-emerald-400 border border-emerald-100 cursor-not-allowed grayscale' 
-                                    : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200'
-                                }`}
-                            >
-                                <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
-                                Mark Present
-                            </button>
+                        {/* Control Grid */}
+                        <div className="flex flex-wrap items-center justify-center gap-5">
+                            <div className="flex flex-col gap-4">
+                                <div className="flex gap-4">
+                                    {/* MARK PRESENT */}
+                                    <button 
+                                        onClick={() => onStatusChange(myRecord?.id, 'Present')}
+                                        disabled={!myRecord || currentStatus === 'Present'}
+                                        className={`flex items-center gap-3 px-8 py-4 rounded-xl font-black transition-all shadow-xl uppercase tracking-widest text-[11px] ${
+                                            currentStatus === 'Present' 
+                                            ? 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed' 
+                                            : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200 hover:scale-105'
+                                        }`}
+                                    >
+                                        <CheckCircle2 size={18} />
+                                        Mark Present
+                                    </button>
 
-                            {/* MARK ABSENT */}
-                            <button 
-                                onClick={() => onStatusChange(myRecord.id, 'Absent')}
-                                disabled={!myRecord || currentStatus === 'Absent'}
-                                className={`group flex items-center gap-3 px-8 py-5 rounded-[24px] font-black transition-all shadow-xl uppercase tracking-widest text-[11px] ${
-                                    currentStatus === 'Absent' 
-                                    ? 'bg-rose-50 text-rose-400 border border-rose-100 cursor-not-allowed grayscale' 
-                                    : 'bg-slate-100 hover:bg-rose-600 hover:text-white text-slate-600'
-                                }`}
-                            >
-                                <XCircle size={18} className="group-hover:scale-110 transition-transform" />
-                                Mark Absent
-                            </button>
+                                    {/* MARK ABSENT */}
+                                    <button 
+                                        onClick={() => onStatusChange(myRecord?.id, 'Absent')}
+                                        disabled={!myRecord || currentStatus === 'Absent'}
+                                        className={`flex items-center gap-3 px-8 py-4 rounded-xl font-black border-2 transition-all uppercase tracking-widest text-[11px] ${
+                                            currentStatus === 'Absent'
+                                            ? 'bg-slate-50 text-slate-400 border-slate-200 cursor-not-allowed'
+                                            : 'bg-white border-slate-200 text-slate-600 hover:border-rose-500 hover:text-rose-600 hover:scale-105'
+                                        }`}
+                                    >
+                                        <XCircle size={18} />
+                                        Mark Absent
+                                    </button>
+                                </div>
 
-                            {/* EDIT STATUS (Essentially just enabling re-selection) */}
-                            <button 
-                                onClick={() => onStatusChange(myRecord.id, 'Late')}
-                                disabled={!myRecord}
-                                className="group flex items-center gap-3 px-8 py-5 rounded-[24px] font-black bg-white border-2 border-slate-100 text-slate-500 hover:border-amber-400 hover:text-amber-500 transition-all uppercase tracking-widest text-[11px]"
-                            >
-                                <Edit3 size={18} />
-                                Edit status
-                            </button>
+                                <div className="flex items-center gap-4">
+                                    {/* EDIT STATUS */}
+                                    <button 
+                                        onClick={() => onStatusChange(myRecord?.id, 'Late')}
+                                        disabled={!myRecord}
+                                        className="flex items-center gap-3 px-8 py-4 rounded-xl font-black bg-white border-2 border-slate-200 text-slate-600 hover:border-indigo-500 hover:text-indigo-600 transition-all uppercase tracking-widest text-[11px] flex-1"
+                                    >
+                                        <Edit3 size={18} />
+                                        Edit status
+                                    </button>
 
-                            {/* DELETE / CLEAR */}
-                            <button 
-                                onClick={() => {
-                                    if(window.confirm('Delete this attendance entry?')) {
-                                        onStatusChange(myRecord.id, 'Unknown');
-                                    }
-                                }}
-                                disabled={!myRecord || currentStatus === 'Unknown'}
-                                className="p-5 rounded-[24px] bg-white border-2 border-slate-100 text-slate-400 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-500 transition-all group"
-                                title="Delete Entry"
-                            >
-                                <Trash2 size={24} className="group-hover:rotate-12 transition-transform" />
-                            </button>
+                                    {/* TRASH */}
+                                    <button 
+                                        onClick={() => {
+                                            if(window.confirm('Clear institutional attendance record?')) {
+                                                onStatusChange(myRecord?.id, 'Unknown');
+                                            }
+                                        }}
+                                        disabled={!myRecord || currentStatus === 'Unknown'}
+                                        className="h-14 w-14 rounded-xl bg-white border-2 border-slate-200 text-slate-400 hover:bg-rose-50 hover:border-rose-500 hover:text-rose-500 transition-all flex items-center justify-center group/trash"
+                                    >
+                                        <Trash2 size={24} className="group-hover/trash:scale-110 transition-transform" />
+                                    </button>
 
-                            {/* SMS NOTIFICATION */}
-                            <button 
-                                onClick={() => {
-                                    if (myRecord) {
-                                        onSendSMS(myRecord);
-                                    }
-                                }}
-                                disabled={!myRecord}
-                                className="group flex items-center gap-4 px-10 py-5 rounded-[24px] font-black bg-indigo-50 text-indigo-600 border-2 border-indigo-100 hover:bg-indigo-600 hover:text-white transition-all uppercase tracking-widest text-[11px] shadow-lg shadow-indigo-100/50"
-                            >
-                                <Mail size={18} />
-                                Notify Parents
-                            </button>
+                                    {/* NOTIFY PARENTS */}
+                                    <button 
+                                        onClick={() => myRecord && onSendSMS(myRecord)}
+                                        disabled={!myRecord}
+                                        className="flex items-center gap-3 px-8 py-4 rounded-xl font-black bg-white border-2 border-indigo-200 text-indigo-500 hover:bg-indigo-600 hover:text-white transition-all uppercase tracking-widest text-[11px]"
+                                    >
+                                        <Mail size={18} />
+                                        Notify Parents
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
