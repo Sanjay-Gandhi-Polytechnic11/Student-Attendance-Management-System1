@@ -10,7 +10,7 @@ import {
     Database,
     Activity,
     Zap,
-    Cpu,
+    LayoutGrid,
     Search,
     AlertTriangle,
     MoreHorizontal,
@@ -209,7 +209,7 @@ const AdminDashboard = ({ users = [], students = [], onSendSMS }) => {
                     <div className="grid grid-cols-3 gap-16">
                         <HealthMetric label="Inbound" value="128k/h" icon={<Zap size={24} className="text-amber-500" />} />
                         <HealthMetric label="Latency" value="24ms" icon={<Activity size={24} className="text-emerald-500" />} />
-                        <HealthMetric label="Storage" value="65%" icon={<Cpu size={24} className="text-indigo-500" />} />
+                        <HealthMetric label="Storage" value="65%" icon={<LayoutGrid size={24} className="text-indigo-500" />} />
                     </div>
                 </div>
 

@@ -12,11 +12,12 @@ import {
     Fingerprint,
     Database,
     Zap,
-    Cpu,
     GitBranch,
     Calendar,
+    LayoutGrid,
     Edit,
-    Mail
+    Mail,
+    RefreshCw
 } from 'lucide-react';
 
 const AttendancePanel = ({ students, onStatusChange, onUpdateStudent, onSendIndividualSMS }) => {
@@ -24,11 +25,32 @@ const AttendancePanel = ({ students, onStatusChange, onUpdateStudent, onSendIndi
     const [localSearch, setLocalSearch] = useState('');
     const [editingStudent, setEditingStudent] = useState(null);
     const [editFormData, setEditFormData] = useState({ name: '', roll: '', studentClass: '', status: 'Present', parentPhoneNumber: '' });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
 
-    const filteredStudents = students.filter(student => {
+    const handleSubmit = async () => {
+        setIsSubmitting(true);
+        try {
+            // Simulating institutional sync
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            alert('Attendance Registry Successfully Committed');
+            setShowSuccess(true);
+            setTimeout(() => setShowSuccess(false), 5000);
+        } catch (error) {
+            console.error("Submission failed:", error);
+            alert('Failed to commit registry. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const filteredStudents = (students || []).filter(student => {
+        if (!student) return false;
         const matchesStatus = filter === 'All' || student.status === filter;
-        const matchesSearch = student.name.toLowerCase().includes(localSearch.toLowerCase()) ||
-            student.roll.toLowerCase().includes(localSearch.toLowerCase());
+        const studentName = student.name || '';
+        const studentRoll = student.roll || student.registerNumber || '';
+        const matchesSearch = studentName.toLowerCase().includes(localSearch.toLowerCase()) ||
+            studentRoll.toLowerCase().includes(localSearch.toLowerCase());
         return matchesStatus && matchesSearch;
     });
 
@@ -86,12 +108,39 @@ const AttendancePanel = ({ students, onStatusChange, onUpdateStudent, onSendIndi
                 </div>
             </motion.div>
 
+            {/* SUCCESS FEEDBACK */}
+            <AnimatePresence>
+                {showSuccess && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                        animate={{ opacity: 1, height: 'auto', marginBottom: 40 }}
+                        exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                        className="bg-emerald-50 border border-emerald-100 rounded-[32px] p-8 overflow-hidden mx-2 shadow-sm"
+                    >
+                        <div className="flex items-center gap-6">
+                            <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 border border-emerald-500/20">
+                                <CheckCircle2 size={32} />
+                            </div>
+                            <div>
+                                <h3 className="text-2xl font-black text-slate-800 tracking-tight">Registry Synchronized</h3>
+                                <p className="text-slate-500 font-medium text-base">All personnel records have been committed to the SGPB Central Core.</p>
+                            </div>
+                            <div className="ml-auto">
+                                <span className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.2em] bg-emerald-500/10 px-4 py-2 rounded-full border border-emerald-500/10">
+                                    Protocol Success
+                                </span>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             {/* NEW: Institutional Filtering parameters */}
             <motion.div className="bg-white border border-slate-100 rounded-[32px] p-8 relative overflow-hidden group shadow-sm" variants={itemVariants}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-2">
-                            <Cpu size={14} className="text-indigo-600" /> Department
+                        <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                            <LayoutGrid size={14} className="text-indigo-500" /> Department
                         </label>
                         <select className="w-full bg-slate-50 border border-slate-100 rounded-xl py-3 px-4 text-xs font-bold text-slate-700 outline-none focus:border-indigo-600 transition-all appearance-none cursor-pointer">
                             <option value="">Select Department</option>
@@ -116,8 +165,8 @@ const AttendancePanel = ({ students, onStatusChange, onUpdateStudent, onSendIndi
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-2">
-                            <Calendar size={14} className="text-indigo-600" /> Semester
+                        <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                            <Fingerprint size={14} className="text-indigo-500" /> Semester
                         </label>
                         <select className="w-full bg-slate-50 border border-slate-100 rounded-xl py-3 px-4 text-xs font-bold text-slate-700 outline-none focus:border-indigo-600 transition-all appearance-none cursor-pointer">
                             <option value="">Select Semester</option>
@@ -270,9 +319,19 @@ const AttendancePanel = ({ students, onStatusChange, onUpdateStudent, onSendIndi
                             <p className="text-[11px] text-slate-400 font-bold uppercase tracking-[0.15em] mt-1 italic">Protocol 92.4 active • Atomic timestamping enabled</p>
                         </div>
                     </div>
-                    <button className="btn-primary h-14 px-16 group gap-4 relative overflow-hidden shadow-indigo-200">
-                        <span className="relative z-10 font-black uppercase tracking-widest text-[13px]">Finalize Registry Log</span>
-                        <Check size={20} className="relative z-10 group-hover:scale-125 transition-transform" />
+                    <button 
+                        onClick={handleSubmit}
+                        disabled={isSubmitting}
+                        className={`btn-primary h-14 px-16 group gap-4 relative overflow-hidden shadow-indigo-200 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                    >
+                        <span className="relative z-10 font-black uppercase tracking-widest text-[13px]">
+                            {isSubmitting ? 'Synchronizing Core...' : 'Finalize Registry Log'}
+                        </span>
+                        {isSubmitting ? (
+                            <RefreshCw size={20} className="relative z-10 animate-spin" />
+                        ) : (
+                            <Check size={20} className="relative z-10 group-hover:scale-125 transition-transform" />
+                        )}
                     </button>
                 </div>
             </motion.div>

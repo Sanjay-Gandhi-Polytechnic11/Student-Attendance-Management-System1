@@ -13,7 +13,7 @@ import {
     Clock,
     Calendar,
     Settings,
-    Cpu,
+    Fingerprint,
     Lock,
     RefreshCw,
     ShieldCheck
@@ -83,7 +83,7 @@ const PortalSettings = ({ onDeleteAccount, onSyncRegistry }) => {
             <motion.div className="flex flex-col md:flex-row items-center justify-between gap-8 px-2" variants={itemVariants}>
                 <div>
                     <h2 className="text-4xl font-black text-white tracking-tight flex items-center gap-4">
-                        <Cpu className="text-indigo-500" size={32} />
+                        <Fingerprint className="text-indigo-500" size={32} />
                         Portal <span className="text-indigo-500 italic">Core</span> Configuration
                     </h2>
                     <div className="flex items-center gap-4 mt-2">
@@ -142,7 +142,7 @@ const PortalSettings = ({ onDeleteAccount, onSyncRegistry }) => {
 
                         <div className="space-y-3">
                             <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 flex items-center gap-2">
-                                <Cpu size={14} className="text-slate-600" /> Active Sector Semester
+                                <Fingerprint size={14} className="text-slate-600" /> Active Sector Semester
                             </label>
                             <div className="grid grid-cols-2 gap-4">
                                 <button

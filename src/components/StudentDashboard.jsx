@@ -7,7 +7,7 @@ import {
     Clock,
     TrendingUp,
     ShieldCheck,
-    Cpu,
+    LayoutGrid,
     GitBranch,
     FileText,
     Activity,
@@ -118,7 +118,7 @@ const StudentDashboard = ({ user, students = [], onStatusChange, onSendSMS }) =>
             {/* 2. INSTITUTIONAL FILTERS (Mirroring HOD) */}
             <motion.div className="glass-panel p-8 relative overflow-hidden group" variants={itemVariants}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <FilterSelect label="Department" icon={<Cpu size={14} />} options={['CS', 'Electrical', 'Mechanical']} />
+                    <FilterSelect label="Department" icon={<LayoutGrid size={14} />} options={['CS', 'Electrical', 'Mechanical']} />
                     <FilterSelect label="Branch" icon={<GitBranch size={14} />} options={['CSE', 'ECE', 'EEE']} />
                     <FilterSelect label="Semester" icon={<Calendar size={14} />} options={['Sem I', 'Sem II', 'Sem III', 'Sem IV', 'Sem V']} />
                     <FilterSelect label="Filter Subject" icon={<BookOpen size={14} />} options={['Algorithms', 'Web Dev', 'IoT']} />

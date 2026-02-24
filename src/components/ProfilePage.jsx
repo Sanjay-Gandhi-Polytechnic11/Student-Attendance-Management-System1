@@ -10,7 +10,7 @@ import {
     LogOut,
     Trash2,
     ShieldCheck,
-    Cpu
+    Fingerprint
 } from 'lucide-react';
 
 const ProfilePage = ({ user, onDeleteAccount }) => {
@@ -66,7 +66,7 @@ const ProfilePage = ({ user, onDeleteAccount }) => {
             {/* Profile Overview */}
             <motion.div className="bg-white border border-slate-100 rounded-[40px] p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center gap-10 shadow-sm" variants={itemVariants}>
                 <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none">
-                    <Cpu size={240} className="text-slate-900" />
+                    <Fingerprint size={240} className="text-slate-900" />
                 </div>
 
                 <div className="relative">

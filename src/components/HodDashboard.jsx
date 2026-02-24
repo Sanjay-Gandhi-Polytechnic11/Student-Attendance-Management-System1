@@ -7,7 +7,7 @@ import {
     Clock,
     TrendingUp,
     ShieldCheck,
-    Cpu,
+    LayoutGrid,
     GitBranch,
     FileText,
     Activity,
@@ -18,6 +18,7 @@ import {
     UserPlus,
     CheckCircle2,
     XCircle,
+    Zap,
     Info,
     BookOpen,
     Search,
@@ -106,7 +107,7 @@ const HodDashboard = ({ onNavigate, students = [], onSendSMS, onUpdateStudent })
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     <div className="space-y-3">
                         <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
-                            <Cpu size={14} className="text-indigo-500" /> Department
+                            <LayoutGrid size={14} className="text-indigo-500" /> Department
                         </label>
                         <select className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3.5 px-4 text-xs font-bold text-slate-700 outline-none focus:border-indigo-500 transition-all appearance-none cursor-pointer">
                             <option value="">All Departments</option>

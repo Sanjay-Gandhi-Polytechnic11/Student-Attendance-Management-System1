@@ -9,7 +9,6 @@ import {
     ChevronLeft,
     ChevronRight,
     Search,
-    Cpu,
     Zap,
     LayoutGrid,
     BookMarked
@@ -86,7 +85,7 @@ const SchedulePage = () => {
                     </h1>
                     <div className="flex items-center gap-4">
                         <span className="flex items-center gap-2 text-[13px] font-bold text-slate-400 uppercase tracking-widest bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
-                            <Cpu size={14} className="text-indigo-500" />
+                            <LayoutGrid size={14} className="text-indigo-500" />
                             Session: A-2024
                         </span>
                         <p className="text-[14px] font-medium text-slate-500 underline underline-offset-4 decoration-indigo-500/30">Computer Science Department</p>

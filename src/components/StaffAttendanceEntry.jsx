@@ -18,8 +18,8 @@ import {
     ArrowRight,
     CheckCircle2,
     ShieldCheck,
-    Cpu,
     GitBranch,
+    LayoutGrid,
     Edit,
     Mail
 } from 'lucide-react';
@@ -168,7 +168,7 @@ const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, 
             <motion.div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-2" variants={itemVariants}>
                 <div>
                     <h1 className="text-5xl font-black text-slate-800 tracking-tight mb-2 flex items-center gap-3">
-                        <Cpu className="text-indigo-600" size={40} />
+                        <LayoutGrid className="text-indigo-600" size={40} />
                         Attendance <span className="text-indigo-600 italic">Ledger</span>
                     </h1>
                     <div className="flex items-center gap-4">
@@ -271,7 +271,7 @@ const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, 
                         />
                     </InputField>
 
-                    <InputField label="Strategic Department" icon={<Cpu size={16} />}>
+                    <InputField label="Strategic Department" icon={<LayoutGrid size={16} />}>
                         <select
                             name="department"
                             value={formData.department}
