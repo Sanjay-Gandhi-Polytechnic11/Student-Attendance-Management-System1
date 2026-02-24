@@ -11,6 +11,8 @@ const RegisterPage = ({ onRegister, onSwitchToLogin }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [role, setRole] = useState('TEACHER');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [rollNumber, setRollNumber] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -29,7 +31,9 @@ const RegisterPage = ({ onRegister, onSwitchToLogin }) => {
                 username,
                 password,
                 email,
-                role: role
+                role: role,
+                phoneNumber,
+                rollNumber
             });
             onRegister(user);
         } catch (err) {
@@ -130,6 +134,41 @@ const RegisterPage = ({ onRegister, onSwitchToLogin }) => {
                             </div>
                         </div>
                     </div>
+
+                    {role === 'STUDENT' && (
+                        <div style={{ display: 'flex', gap: '20px' }}>
+                            <div className="input-group" style={{ flex: 1 }}>
+                                <label className="input-label">Register Number</label>
+                                <div style={{ position: 'relative' }}>
+                                    <BadgeCheck size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                                    <input
+                                        type="text"
+                                        className="input-field"
+                                        style={{ paddingLeft: '48px' }}
+                                        placeholder="SGPB/Roll/..."
+                                        value={rollNumber}
+                                        onChange={(e) => setRollNumber(e.target.value)}
+                                        required={role === 'STUDENT'}
+                                    />
+                                </div>
+                            </div>
+                            <div className="input-group" style={{ flex: 1 }}>
+                                <label className="input-label">Mobile Number</label>
+                                <div style={{ position: 'relative' }}>
+                                    <ShieldAlert size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                                    <input
+                                        type="tel"
+                                        className="input-field"
+                                        style={{ paddingLeft: '48px' }}
+                                        placeholder="+91..."
+                                        value={phoneNumber}
+                                        onChange={(e) => setPhoneNumber(e.target.value)}
+                                        required={role === 'STUDENT'}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     <div style={{ display: 'flex', gap: '20px' }}>
                         <div className="input-group" style={{ flex: 1 }}>

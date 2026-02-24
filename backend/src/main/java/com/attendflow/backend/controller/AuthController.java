@@ -3,6 +3,8 @@ package com.attendflow.backend.controller;
 import com.attendflow.backend.model.User;
 import com.attendflow.backend.repository.UserRepository;
 import com.attendflow.backend.service.EmailService;
+import com.attendflow.backend.service.SmsService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,9 @@ public class AuthController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private SmsService smsService;
+
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -34,7 +39,17 @@ public class AuthController {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username already taken");
         }
-        return ResponseEntity.ok(userRepository.save(user));
+        User savedUser = userRepository.save(user);
+
+        // If it's a student, send a welcome SMS to the parent number
+        if ("STUDENT".equals(user.getRole()) && user.getPhoneNumber() != null && !user.getPhoneNumber().isEmpty()) {
+            String message = String.format(
+                    "Welcome to SGPB Portal. %s is now registered for attendance tracking. Registry ID: %s",
+                    user.getUsername(), user.getRollNumber());
+            smsService.sendSms(user.getPhoneNumber(), message);
+        }
+
+        return ResponseEntity.ok(savedUser);
     }
 
     @PostMapping("/login")
@@ -72,11 +87,16 @@ public class AuthController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteAccount(@PathVariable Long id) {
-        return userRepository.findById(id)
-                .map(user -> {
-                    userRepository.delete(user);
-                    return ResponseEntity.ok().body(java.util.Map.of("message", "Account deleted successfully"));
-                })
-                .orElse(ResponseEntity.notFound().build());
+        if (id == null) {
+            return ResponseEntity.badRequest().body("User ID is required");
+        }
+
+        Optional<User> userOpt = userRepository.findById(id);
+        if (userOpt.isPresent()) {
+            User userToRemove = userOpt.get();
+            userRepository.delete(userToRemove);
+            return ResponseEntity.ok().body(java.util.Map.of("message", "Account deleted successfully"));
+        }
+        return ResponseEntity.notFound().build();
     }
 }

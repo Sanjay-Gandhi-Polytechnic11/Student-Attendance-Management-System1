@@ -11,16 +11,11 @@ public class SmsService {
         // In a real application, you would integrate with an SMS gateway like Twilio,
         // Vonage, etc.
         // For now, we will simulate the SMS sending by logging it.
-        log.info("Sending SMS to: {}", to);
-        log.info("Message: {}", message);
-
-        // Simulate a delay
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-
-        System.out.println("SMS sent successfully to " + to + ": " + message);
+        System.out.println("--------------------------------------------------");
+        System.out.println("GATEWAY: SMS PROTOCOL INITIATED");
+        System.out.println("TARGET : " + to);
+        System.out.println("PAYLOAD: " + message);
+        System.out.println("STATUS : SUCCESSFUL DELIVERY");
+        System.out.println("--------------------------------------------------");
     }
 }

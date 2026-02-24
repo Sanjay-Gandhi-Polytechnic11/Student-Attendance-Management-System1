@@ -47,14 +47,29 @@ public class StudentController {
         return studentRepository.findById(id)
                 .map(student -> {
                     student.setName(studentDetails.getName());
+                    String oldPhone = student.getParentPhoneNumber();
+                    String newPhone = studentDetails.getParentPhoneNumber();
+
                     student.setRoll(studentDetails.getRoll());
                     student.setStudentClass(studentDetails.getStudentClass());
-                    student.setParentPhoneNumber(studentDetails.getParentPhoneNumber());
+                    student.setParentPhoneNumber(newPhone);
+
                     if (studentDetails.getStatus() != null)
                         student.setStatus(studentDetails.getStatus());
                     if (studentDetails.getTime() != null)
                         student.setTime(studentDetails.getTime());
-                    return ResponseEntity.ok(studentRepository.save(student));
+
+                    Student updated = studentRepository.save(student);
+
+                    // Send notification if phone number was changed or newly added
+                    if (newPhone != null && !newPhone.isEmpty() && !newPhone.equals(oldPhone)) {
+                        String msg = String.format(
+                                "SGPB Alert: Mobile Notification Node updated for %s. You will now receive attendance alerts here.",
+                                student.getName());
+                        smsService.sendSms(newPhone, msg);
+                    }
+
+                    return ResponseEntity.ok(updated);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }

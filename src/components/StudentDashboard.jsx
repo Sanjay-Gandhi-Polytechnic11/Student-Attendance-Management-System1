@@ -20,7 +20,8 @@ import {
     Info,
     Layout,
     Trash2,
-    Edit3
+    Edit3,
+    Smartphone
 } from 'lucide-react';
 import {
     BarChart,
@@ -37,7 +38,7 @@ import {
     Line
 } from 'recharts';
 
-const StudentDashboard = ({ user, students = [], onStatusChange }) => {
+const StudentDashboard = ({ user, students = [], onStatusChange, onSendSMS }) => {
     // Find own record from the students prop
     const myRecord = students.find(s => 
         s.name.toLowerCase().includes(user?.username?.toLowerCase() || '') || 
@@ -252,7 +253,7 @@ const StudentDashboard = ({ user, students = [], onStatusChange }) => {
             {/* 5. ATTENDANCE INTERACTION REGISTRY */}
             <motion.div className="px-2" variants={itemVariants}>
                 <div className="bg-white rounded-[40px] p-12 shadow-sm border border-slate-100 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-1000">
+                    <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none group-hover:scale-110 transition-transform duration-1000">
                         <ShieldCheck size={200} />
                     </div>
 
@@ -334,8 +335,48 @@ const StudentDashboard = ({ user, students = [], onStatusChange }) => {
                             >
                                 <Trash2 size={24} className="group-hover:rotate-12 transition-transform" />
                             </button>
+
+                            {/* SMS NOTIFICATION */}
+                            <button 
+                                onClick={() => {
+                                    if (myRecord) {
+                                        onSendSMS(myRecord);
+                                    }
+                                }}
+                                disabled={!myRecord}
+                                className="group flex items-center gap-4 px-10 py-5 rounded-[24px] font-black bg-indigo-50 text-indigo-600 border-2 border-indigo-100 hover:bg-indigo-600 hover:text-white transition-all uppercase tracking-widest text-[11px] shadow-lg shadow-indigo-100/50"
+                            >
+                                <Mail size={18} />
+                                Notify Parents
+                            </button>
                         </div>
                     </div>
+                    
+                    {myRecord && (
+                        <div className="mt-12 pt-8 border-t border-slate-50 grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 bg-slate-50 rounded-xl text-slate-400"><User size={20} /></div>
+                                <div>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Name of the Student</p>
+                                    <p className="text-sm font-black text-slate-700">{myRecord.name}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 bg-slate-50 rounded-xl text-slate-400"><ShieldCheck size={20} /></div>
+                                <div>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Register Number</p>
+                                    <p className="text-sm font-black text-slate-700 font-mono">{myRecord.roll || myRecord.registerNumber}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 bg-slate-50 rounded-xl text-slate-400"><Smartphone size={20} /></div>
+                                <div>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mobile Number</p>
+                                    <p className="text-sm font-black text-slate-700 font-mono">{myRecord.parentPhoneNumber || 'Unlinked'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </motion.div>
         </motion.div>

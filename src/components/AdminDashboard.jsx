@@ -15,10 +15,13 @@ import {
     AlertTriangle,
     MoreHorizontal,
     Download,
-    LogOut
+    LogOut,
+    Mail,
+    UserCheck,
+    Smartphone
 } from 'lucide-react';
 
-const AdminDashboard = ({ users = [], students = [] }) => {
+const AdminDashboard = ({ users = [], students = [], onSendSMS }) => {
     const totalFaculty = users.length;
     const totalStudents = students.length;
     const uniqueClasses = [...new Set(students.map(s => s.studentClass || s.class))].filter(Boolean).length || 1;
@@ -112,6 +115,78 @@ const AdminDashboard = ({ users = [], students = [] }) => {
                         <LogEntry time="1h ago" action="Privilege Escalation" user="M. Garcia" status="Audit" />
                         <LogEntry time="3h ago" action="Sector Initialization" user="S. Wilson" status="Verified" />
                     </div>
+                </div>
+            </div>
+
+            {/* Student Directory Management */}
+            <div className="glass-panel p-8">
+                <div className="flex items-center justify-between mb-10">
+                    <div>
+                        <h3 className="text-2xl font-black text-slate-800 uppercase tracking-tight">Student Infrastructure Registry</h3>
+                        <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1">Centralized Enrollment Control</p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <div className="relative group">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500" size={16} />
+                            <input 
+                                type="text" 
+                                placeholder="Locate Personnel ID..." 
+                                className="bg-slate-50 border border-slate-100 rounded-xl py-2.5 pl-12 pr-4 text-xs font-bold w-64 focus:border-indigo-500/30 transition-all outline-none"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                        <thead>
+                            <tr className="border-b border-slate-100">
+                                <th className="pb-4 text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Name of the Student</th>
+                                <th className="pb-4 text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Register Number</th>
+                                <th className="pb-4 text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Mobile Number</th>
+                                <th className="pb-4 text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] text-center">Protocol Action</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-50">
+                            {students.map(s => (
+                                <tr key={s.id} className="hover:bg-slate-50/50 transition-colors group">
+                                    <td className="py-5">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center font-black text-indigo-500 text-xs shadow-sm">
+                                                {s.name?.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <p className="font-black text-slate-800 text-sm tracking-tight">{s.name}</p>
+                                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest italic">{s.studentClass || 'Sector Alpha'}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="py-5">
+                                        <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-lg font-mono text-xs font-bold border border-slate-200">
+                                            {s.roll || s.registerNumber || 'ID-ERR'}
+                                        </span>
+                                    </td>
+                                    <td className="py-5 text-sm font-bold text-slate-500 font-mono">
+                                        <div className="flex items-center gap-2">
+                                            <Smartphone size={14} className="text-slate-400" />
+                                            {s.parentPhoneNumber || 'No Contact'}
+                                        </div>
+                                    </td>
+                                    <td className="py-5">
+                                        <div className="flex items-center justify-center gap-3">
+                                            <button 
+                                                onClick={() => onSendSMS ? onSendSMS(s) : alert('SMS Node Offline')}
+                                                className="p-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 group/btn"
+                                                title="Execute SMS Notification"
+                                            >
+                                                <Mail size={16} className="group-hover/btn:scale-110 transition-transform" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
 

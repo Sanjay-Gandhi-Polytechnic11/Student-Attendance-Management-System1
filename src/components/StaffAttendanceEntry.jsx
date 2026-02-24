@@ -563,19 +563,21 @@ const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, 
                             <p className="text-slate-500 text-sm font-bold uppercase tracking-widest mb-10">Updating personnel ID: {editingStudent.id}</p>
 
                             <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-2 col-span-2">
-                                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Full Identification</label>
+                                <div className="space-y-2">
+                                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Name of the Student</label>
                                     <input
                                         type="text"
+                                        placeholder="Student Name"
                                         value={editFormData.name}
                                         onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
                                         className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white font-bold outline-none focus:border-indigo-500 transition-all font-sans"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Protocol ID</label>
+                                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Register Number</label>
                                     <input
                                         type="text"
+                                        placeholder="Roll Number"
                                         value={editFormData.roll}
                                         onChange={(e) => setEditFormData({ ...editFormData, roll: e.target.value })}
                                         className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white font-mono font-bold outline-none focus:border-indigo-500 transition-all"
@@ -607,7 +609,7 @@ const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, 
                                     </select>
                                 </div>
                                 <div className="space-y-2 col-span-2">
-                                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Parent Contact Node (SMS)</label>
+                                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Mobile Number</label>
                                     <input
                                         type="text"
                                         placeholder="+1 234 567 890"

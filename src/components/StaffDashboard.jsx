@@ -20,7 +20,8 @@ import {
     CheckCircle,
     Clock4,
     AlertCircle,
-    RefreshCw
+    RefreshCw,
+    Mail
 } from 'lucide-react';
 import {
     BarChart,

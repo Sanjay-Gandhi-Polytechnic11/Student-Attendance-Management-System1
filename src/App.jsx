@@ -158,11 +158,17 @@ function App() {
         }
     };
 
-    const handleSendSms = async (studentList = students) => {
+    const handleSendSms = async (studentList) => {
         try {
-            const listToSend = Array.isArray(studentList) ? studentList : [studentList];
+            // Defensively handle cases where handleSendSms is called directly as an onClick handler
+            // (passing the click event instead of student data)
+            const isEvent = studentList && (studentList.nativeEvent || studentList.target);
+            const listToSend = (studentList === undefined || isEvent) 
+                ? students 
+                : (Array.isArray(studentList) ? studentList : [studentList]);
+
             await api.sendSmsToParents(listToSend);
-            alert('SMS notifications sent successfully.');
+            alert(`SMS notifications sent successfully to ${listToSend.length} recipients.`);
         } catch (error) {
             alert('Failed to send SMS: ' + error.message);
         }
@@ -190,10 +196,10 @@ function App() {
             user={currentUser}
             onDeleteAccount={handleDeleteAccount}
         >
-            {activeTab === 'admin-dashboard' && <AdminDashboard users={users} students={students} />}
-            {activeTab === 'hod-dashboard' && <HodDashboard onNavigate={(tab) => setActiveTab(tab)} students={students} onSendSMS={handleSendSms} />}
+            {activeTab === 'admin-dashboard' && <AdminDashboard users={users} students={students} onSendSMS={handleSendSms} />}
+            {activeTab === 'hod-dashboard' && <HodDashboard onNavigate={(tab) => setActiveTab(tab)} students={students} onSendSMS={handleSendSms} onUpdateStudent={handleUpdateStudent} />}
             {activeTab === 'staff-dashboard' && <StaffDashboard onNavigateToAttendance={(tab) => setActiveTab(tab)} students={students} onSendSMS={handleSendSms} />}
-            {activeTab === 'student-dashboard' && <StudentDashboard user={currentUser} students={students} onStatusChange={handleStatusChange} />}
+            {activeTab === 'student-dashboard' && <StudentDashboard user={currentUser} students={students} onStatusChange={handleStatusChange} onSendSMS={handleSendSms} />}
 
             {(activeTab === 'dashboard' || activeTab === 'analytics') && <Dashboard students={students} searchQuery={searchQuery} isSearching={isSearching} onSendSMS={handleSendSms} />}
             {activeTab === 'reports' && <ReportPage records={students} />}
