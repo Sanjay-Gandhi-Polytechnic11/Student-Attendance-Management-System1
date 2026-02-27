@@ -5,7 +5,6 @@ import com.attendflow.backend.model.Student;
 import com.attendflow.backend.repository.UserRepository;
 import com.attendflow.backend.repository.StudentRepository;
 import com.attendflow.backend.service.EmailService;
-import com.attendflow.backend.service.SmsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +26,6 @@ public class AuthController {
 
     @Autowired
     private EmailService emailService;
-
-    @Autowired
-    private SmsService smsService;
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
@@ -56,13 +52,6 @@ public class AuthController {
             student.setStatus("Unknown");
             student.setTime("-");
             studentRepository.save(student);
-
-            if (user.getPhoneNumber() != null && !user.getPhoneNumber().isEmpty()) {
-                String message = String.format(
-                        "Welcome to SGPB Portal. %s is now registered for attendance tracking. Registry ID: %s",
-                        user.getUsername(), user.getRollNumber());
-                smsService.sendSms(user.getPhoneNumber(), message);
-            }
         }
 
         return ResponseEntity.ok(savedUser);

@@ -2,7 +2,6 @@ package com.attendflow.backend.controller;
 
 import com.attendflow.backend.model.Student;
 import com.attendflow.backend.repository.StudentRepository;
-import com.attendflow.backend.service.SmsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,6 @@ public class StudentController {
 
     @Autowired
     private StudentRepository studentRepository;
-
-    @Autowired
-    private SmsService smsService;
 
     @GetMapping
     public List<Student> getAllStudents() {
@@ -63,31 +59,9 @@ public class StudentController {
 
                     Student updated = studentRepository.save(student);
 
-                    // Send notification if phone number was changed or newly added
-                    if (newPhone != null && !newPhone.isEmpty() && !newPhone.equals(oldPhone)) {
-                        String msg = String.format(
-                                "SGPB Alert: Mobile Notification Node updated for %s. You will now receive attendance alerts here.",
-                                student.getName());
-                        smsService.sendSms(newPhone, msg);
-                    }
-
                     return ResponseEntity.ok(updated);
                 })
                 .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PostMapping("/send-sms")
-    public ResponseEntity<String> sendSmsToParents(@RequestBody List<Student> students) {
-        for (Student student : students) {
-            String phoneNumber = student.getParentPhoneNumber();
-            if (phoneNumber != null && !phoneNumber.isEmpty()) {
-                String status = student.getStatus() != null ? student.getStatus() : "Unknown";
-                String message = String.format("Dear Parent, your child %s (Roll: %s) is %s today.",
-                        student.getName(), student.getRoll(), status);
-                smsService.sendSms(phoneNumber, message);
-            }
-        }
-        return ResponseEntity.ok("SMS notifications sent successfully");
     }
 
     @PostMapping

@@ -44,8 +44,7 @@ function App() {
             notifications: true,
             darkMode: true,
             autoBackup: false,
-            emailAlerts: true,
-            smsAlerts: true // Defaulted to true to ensure it works for the user
+            emailAlerts: true
         };
     });
 
@@ -190,26 +189,6 @@ function App() {
         }
     };
 
-    const handleSendSms = async (studentList) => {
-        try {
-            // Defensively handle cases where handleSendSms is called directly as an onClick handler
-            // (passing the click event instead of student data)
-            const isEvent = studentList && (studentList.nativeEvent || studentList.target);
-            const listToSend = (studentList === undefined || isEvent) 
-                ? students 
-                : (Array.isArray(studentList) ? studentList : [studentList]);
-
-            if (!settings.smsAlerts) {
-                alert('SMS Alerts are Currently Disabled in Portal Settings. Please enable "SMS Priority Alerts" to send.');
-                return;
-            }
-
-            await api.sendSmsToParents(listToSend);
-            alert('SMS Sent Successfully To The Recipient');
-        } catch (error) {
-            alert('Failed to send SMS: ' + error.message);
-        }
-    };
 
     if (!isAuthenticated) {
         if (authView === 'home') {
@@ -259,12 +238,12 @@ function App() {
                     hideNavbar={true}
                 />
             )}
-            {activeTab === 'admin-dashboard' && <AdminDashboard users={users} students={students} onSendSMS={handleSendSms} />}
-            {activeTab === 'hod-dashboard' && <HodDashboard onNavigate={(tab) => setActiveTab(tab)} students={students} onSendSMS={handleSendSms} onUpdateStudent={handleUpdateStudent} />}
-            {activeTab === 'staff-dashboard' && <StaffDashboard onNavigateToAttendance={(tab) => setActiveTab(tab)} students={students} onSendSMS={handleSendSms} />}
-            {activeTab === 'student-dashboard' && <StudentDashboard user={currentUser} students={students} onStatusChange={handleStatusChange} onSendSMS={handleSendSms} />}
+            {activeTab === 'admin-dashboard' && <AdminDashboard users={users} students={students} />}
+            {activeTab === 'hod-dashboard' && <HodDashboard onNavigate={(tab) => setActiveTab(tab)} students={students} onUpdateStudent={handleUpdateStudent} />}
+            {activeTab === 'staff-dashboard' && <StaffDashboard onNavigateToAttendance={(tab) => setActiveTab(tab)} students={students} />}
+            {activeTab === 'student-dashboard' && <StudentDashboard user={currentUser} students={students} onStatusChange={handleStatusChange} />}
 
-            {(activeTab === 'dashboard' || activeTab === 'analytics') && <Dashboard students={students} searchQuery={searchQuery} isSearching={isSearching} onSendSMS={handleSendSms} />}
+            {(activeTab === 'dashboard' || activeTab === 'analytics') && <Dashboard students={students} searchQuery={searchQuery} isSearching={isSearching} />}
             {activeTab === 'reports' && <ReportPage records={students} />}
             {(activeTab === 'attendance' || activeTab === 'quick-mark' || activeTab === 'attenditics' || activeTab === 'staff-attendance') && (
                 <div className="max-w-5xl mx-auto">
@@ -272,7 +251,6 @@ function App() {
                         students={students}
                         onStatusChange={handleStatusChange}
                         onUpdateStudent={handleUpdateStudent}
-                        onSendIndividualSMS={handleSendSms}
                     />
                 </div>
             )}

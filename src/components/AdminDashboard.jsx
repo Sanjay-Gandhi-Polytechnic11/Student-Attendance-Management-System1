@@ -21,7 +21,7 @@ import {
     Smartphone
 } from 'lucide-react';
 
-const AdminDashboard = ({ users = [], students = [], onSendSMS }) => {
+const AdminDashboard = ({ users = [], students = [] }) => {
     const totalFaculty = users.length;
     const totalStudents = students.length;
     const uniqueClasses = [...new Set(students.map(s => s.studentClass || s.class))].filter(Boolean).length || 1;
@@ -172,17 +172,7 @@ const AdminDashboard = ({ users = [], students = [], onSendSMS }) => {
                                             {s.parentPhoneNumber || 'No Contact'}
                                         </div>
                                     </td>
-                                    <td className="py-5">
-                                        <div className="flex items-center justify-center gap-3">
-                                            <button 
-                                                onClick={() => onSendSMS ? onSendSMS(s) : alert('SMS Node Offline')}
-                                                className="p-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 group/btn"
-                                                title="Execute SMS Notification"
-                                            >
-                                                <Mail size={16} className="group-hover/btn:scale-110 transition-transform" />
-                                            </button>
-                                        </div>
-                                    </td>
+
                                 </tr>
                             ))}
                         </tbody>

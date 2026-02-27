@@ -24,7 +24,7 @@ import {
     Mail
 } from 'lucide-react';
 
-const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, onUpdateStudent, onSendIndividualSMS }) => {
+const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, onUpdateStudent }) => {
     const [formData, setFormData] = useState({
         date: new Date().toISOString().split('T')[0],
         subject: '',
@@ -480,11 +480,7 @@ const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, 
                                                 onClick={() => {
                                                     const status = attendanceRecords[s.id]?.status === 'present' ? 'Present' : 'Absent';
                                                     if (window.confirm(`Send status SMS for ${s.name}?`)) {
-                                                        if (onSendIndividualSMS) {
-                                                            onSendIndividualSMS([{ ...s, status }]);
-                                                        } else {
-                                                            alert(`SMS protocol initiated for ${s.name}: Status ${status}`);
-                                                        }
+                                                        alert(`SMS protocol initiated for ${s.name}: Status ${status}`);
                                                     }
                                                 }}
                                                 className="p-2.5 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-xl hover:bg-indigo-500 hover:text-white transition-all group"

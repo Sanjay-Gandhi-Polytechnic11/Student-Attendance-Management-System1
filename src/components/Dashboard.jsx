@@ -27,7 +27,7 @@ const data = [
     { name: 'Sun', value: 72 },
 ];
 
-const Dashboard = ({ students = [], onSendSMS }) => {
+const Dashboard = ({ students = [] }) => {
     const totalStudents = students.length || 108;
     const presentCount = students.filter(s => s.status === 'Present').length || 84;
     const absentCount = students.filter(s => s.status === 'Absent').length || 16;
@@ -114,13 +114,7 @@ const Dashboard = ({ students = [], onSendSMS }) => {
                     <button className="btn w-full mt-large" style={{ background: '#f8fafc', color: '#64748b', fontSize: '15px' }}>
                         View Detailed Records
                     </button>
-                    <button 
-                        onClick={onSendSMS}
-                        className="btn w-full mt-small" 
-                        style={{ background: '#4f46e5', color: '#ffffff', fontSize: '15px', fontWeight: '800' }}
-                    >
-                        Send Attendance SMS
-                    </button>
+
                 </div>
             </div>
         </div>

@@ -22,7 +22,7 @@ import {
 } from 'recharts';
 import { generateCSV, downloadFile } from '../utils/reportUtils';
 
-const StaffDashboard = ({ onNavigateToAttendance, students = [], onSendSMS }) => {
+const StaffDashboard = ({ onNavigateToAttendance, students = [] }) => {
     // Analytics Extraction from live registry
     const totalCount = students.length || 0;
     const presentToday = students.filter(s => s.status === 'Present').length || 0;

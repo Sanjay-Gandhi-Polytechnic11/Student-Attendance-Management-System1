@@ -39,7 +39,7 @@ import {
 } from 'recharts';
 import { generateCSV, generateTextReport, downloadFile } from '../utils/reportUtils';
 
-const HodDashboard = ({ onNavigate, students = [], onSendSMS, onUpdateStudent }) => {
+const HodDashboard = ({ onNavigate, students = [], onUpdateStudent }) => {
     // Live calculated data from students prop
     const totalStudentsCount = students.length || 120;
     const presentCount = students.filter(s => s.status === 'Present').length || 100;
@@ -266,7 +266,7 @@ const HodDashboard = ({ onNavigate, students = [], onSendSMS, onUpdateStudent })
 
             {/* 4. STUDENT INFRASTRUCTURE REGISTRY */}
             <motion.div className="mx-2 bg-white rounded-[32px] p-10 shadow-sm border border-slate-100" variants={itemVariants}>
-                <div className="flex flex-col md:flex-row items-center justify-between mb-10 gap-6">
+                <div className="flex items-center justify-between mb-10">
                     <div>
                         <h2 className="text-3xl font-black text-slate-800 tracking-tight mb-1 italic">Student <span className="text-indigo-600">Infrastructure</span> Registry</h2>
                         <p className="text-sm font-medium text-slate-400 uppercase tracking-widest">Departmental Contact & Registry Control</p>
@@ -288,7 +288,6 @@ const HodDashboard = ({ onNavigate, students = [], onSendSMS, onUpdateStudent })
                                 <th className="pb-6 text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Name of the Student</th>
                                 <th className="pb-6 text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Register Number</th>
                                 <th className="pb-6 text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Mobile Number</th>
-                                <th className="pb-6 text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] text-center">Protocol Action</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50">
@@ -320,16 +319,6 @@ const HodDashboard = ({ onNavigate, students = [], onSendSMS, onUpdateStudent })
                                             </span>
                                         </div>
                                     </td>
-                                    <td className="py-6">
-                                        <div className="flex items-center justify-center gap-3">
-                                            <button 
-                                                onClick={() => onSendSMS(s)}
-                                                className="p-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 group/btn"
-                                            >
-                                                <Mail size={16} className="group-hover/btn:scale-110 transition-transform" />
-                                            </button>
-                                        </div>
-                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -337,23 +326,6 @@ const HodDashboard = ({ onNavigate, students = [], onSendSMS, onUpdateStudent })
                 </div>
             </motion.div>
 
-            {/* 5. STRATEGIC ACTIONS */}
-            <motion.div className="px-2" variants={itemVariants}>
-                <div className="bg-white rounded-[32px] p-8 shadow-sm border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div>
-                        <h3 className="text-xl font-bold text-slate-900 mb-1">Institutional Notifications</h3>
-                        <p className="text-sm text-slate-500 font-medium">Broadcast attendance status to all registered parent contact nodes.</p>
-                    </div>
-
-                    <button 
-                        onClick={onSendSMS}
-                        className="flex items-center gap-3 px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold transition-all shadow-lg shadow-indigo-200 group"
-                    >
-                        <Mail size={20} className="group-hover:scale-110 transition-transform" />
-                        Send SMS Notifications
-                    </button>
-                </div>
-            </motion.div>
         </motion.div>
     );
 };
