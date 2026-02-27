@@ -19,17 +19,7 @@ import {
     ShieldCheck
 } from 'lucide-react';
 
-const PortalSettings = ({ onDeleteAccount, onSyncRegistry }) => {
-    const [settings, setSettings] = useState({
-        academicYear: '2023-2024',
-        semester: 'Even',
-        notifications: true,
-        darkMode: true,
-        autoBackup: false,
-        emailAlerts: true,
-        smsAlerts: false
-    });
-
+const PortalSettings = ({ settings, setSettings, onDeleteAccount, onSyncRegistry }) => {
     const [isSaving, setIsSaving] = useState(false);
 
     const handleToggle = (key) => {
@@ -71,6 +61,8 @@ const PortalSettings = ({ onDeleteAccount, onSyncRegistry }) => {
             transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
         }
     };
+
+    if (!settings) return null; // Defensive check
 
     return (
         <motion.div

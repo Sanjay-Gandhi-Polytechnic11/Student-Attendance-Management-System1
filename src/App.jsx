@@ -21,11 +21,12 @@ import StaffAttendanceEntry from './components/StaffAttendanceEntry';
 import SchedulePage from './components/SchedulePage';
 import LeaveGateway from './components/LeaveGateway';
 import ProfilePage from './components/ProfilePage';
+import HomePage from './components/HomePage';
 import { api } from './api';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [authView, setAuthView] = useState('login');
+    const [authView, setAuthView] = useState('home');
     const [userRole, setUserRole] = useState('Teacher');
     const [currentUser, setCurrentUser] = useState(null);
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -35,6 +36,22 @@ function App() {
     const [isSearching, setIsSearching] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [directoryActive, setDirectoryActive] = useState(false);
+    const [settings, setSettings] = useState(() => {
+        const saved = localStorage.getItem('portal_settings');
+        return saved ? JSON.parse(saved) : {
+            academicYear: '2023-2024',
+            semester: 'Even',
+            notifications: true,
+            darkMode: true,
+            autoBackup: false,
+            emailAlerts: true,
+            smsAlerts: true // Defaulted to true to ensure it works for the user
+        };
+    });
+
+    useEffect(() => {
+        localStorage.setItem('portal_settings', JSON.stringify(settings));
+    }, [settings]);
 
     // Initial fetch from backend
     useEffect(() => {
@@ -182,6 +199,11 @@ function App() {
                 ? students 
                 : (Array.isArray(studentList) ? studentList : [studentList]);
 
+            if (!settings.smsAlerts) {
+                alert('SMS Alerts are Currently Disabled in Portal Settings. Please enable "SMS Priority Alerts" to send.');
+                return;
+            }
+
             await api.sendSmsToParents(listToSend);
             alert('SMS Sent Successfully To The Recipient');
         } catch (error) {
@@ -190,15 +212,27 @@ function App() {
     };
 
     if (!isAuthenticated) {
+        if (authView === 'home') {
+            return (
+                <HomePage 
+                    onLogin={() => setAuthView('login')}
+                    onRegister={() => setAuthView('register')}
+                    onDashboard={() => setAuthView('login')}
+                    isAuthenticated={false}
+                />
+            );
+        }
         return authView === 'login' ? (
             <LoginPage
                 onLogin={handleLoginSuccess}
                 onSwitchToRegister={() => setAuthView('register')}
+                onBackToHome={() => setAuthView('home')}
             />
         ) : (
             <RegisterPage
                 onRegister={handleLoginSuccess}
                 onSwitchToLogin={() => setAuthView('login')}
+                onBackToHome={() => setAuthView('home')}
             />
         );
     }
@@ -211,6 +245,20 @@ function App() {
             user={currentUser}
             onDeleteAccount={handleDeleteAccount}
         >
+            {activeTab === 'home' && (
+                <HomePage 
+                    onLogin={() => {}} 
+                    onRegister={() => {}} 
+                    onDashboard={() => {
+                        if (userRole === 'Admin') setActiveTab('admin-dashboard');
+                        else if (userRole === 'HOD') setActiveTab('hod-dashboard');
+                        else if (userRole === 'Student') setActiveTab('student-dashboard');
+                        else setActiveTab('staff-dashboard');
+                    }} 
+                    isAuthenticated={true} 
+                    hideNavbar={true}
+                />
+            )}
             {activeTab === 'admin-dashboard' && <AdminDashboard users={users} students={students} onSendSMS={handleSendSms} />}
             {activeTab === 'hod-dashboard' && <HodDashboard onNavigate={(tab) => setActiveTab(tab)} students={students} onSendSMS={handleSendSms} onUpdateStudent={handleUpdateStudent} />}
             {activeTab === 'staff-dashboard' && <StaffDashboard onNavigateToAttendance={(tab) => setActiveTab(tab)} students={students} onSendSMS={handleSendSms} />}
@@ -232,7 +280,14 @@ function App() {
 
             {activeTab === 'leave' && <LeaveGateway user={currentUser} />}
 
-            {(activeTab === 'settings' || activeTab === 'portal-settings') && <PortalSettings onDeleteAccount={handleDeleteAccount} onSyncRegistry={handleRefreshDirectory} />}
+            {(activeTab === 'settings' || activeTab === 'portal-settings') && (
+                <PortalSettings 
+                    settings={settings}
+                    setSettings={setSettings}
+                    onDeleteAccount={handleDeleteAccount} 
+                    onSyncRegistry={handleRefreshDirectory} 
+                />
+            )}
             {activeTab === 'profile' && <ProfilePage user={currentUser} onDeleteAccount={handleDeleteAccount} />}
 
             {activeTab === 'schedule' && <SchedulePage />}

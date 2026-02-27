@@ -4,7 +4,7 @@ import { User, Lock, ArrowRight, ShieldCheck, BadgeCheck, ShieldAlert, ChevronDo
 import { api } from '../api';
 import SgpLogo from '../assets/logo.png';
 
-const RegisterPage = ({ onRegister, onSwitchToLogin }) => {
+const RegisterPage = ({ onRegister, onSwitchToLogin, onBackToHome }) => {
     const [fullName, setFullName] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -52,6 +52,15 @@ const RegisterPage = ({ onRegister, onSwitchToLogin }) => {
             >
                 <img src={SgpLogo} alt="Sanjay Gandhi Polytechnic" />
             </motion.div>
+            
+            <motion.button
+                onClick={onBackToHome}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                style={{ position: 'fixed', top: '24px', left: '24px', background: 'white', border: '1px solid #e2e8f0', padding: '10px 20px', borderRadius: '12px', fontSize: '13px', fontWeight: 700, color: '#64748b', cursor: 'pointer', zIndex: 100, display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}
+            >
+                <ArrowRight size={16} style={{ transform: 'rotate(180deg)' }} /> Return Home
+            </motion.button>
 
             <motion.div
                 className="login-card"

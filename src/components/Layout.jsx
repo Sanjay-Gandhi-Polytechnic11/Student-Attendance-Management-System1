@@ -13,7 +13,8 @@ import {
     Calendar,
     BookOpen,
     Trash2,
-    User
+    User,
+    Home
 } from 'lucide-react';
 import SgpLogo from '../assets/logo.png';
 
@@ -29,6 +30,7 @@ const Layout = ({ children, activeTab, setActiveTab, logout, user, onDeleteAccou
 
     const navItems = {
         ADMIN: [
+            { id: 'home', label: 'Portal Home', icon: <Home size={20} /> },
             { id: 'admin-dashboard', label: 'Admin Terminal', icon: <LayoutGrid size={20} /> },
             { id: 'dashboard', label: 'General Overview', icon: <Activity size={20} /> },
             { id: 'analytics', label: 'Detailed Analytics', icon: <FileBarChart size={20} /> },
@@ -38,6 +40,7 @@ const Layout = ({ children, activeTab, setActiveTab, logout, user, onDeleteAccou
             { id: 'profile', label: 'Profile', icon: <User size={20} /> },
         ],
         HOD: [
+            { id: 'home', label: 'Portal Home', icon: <Home size={20} /> },
             { id: 'hod-dashboard', label: 'Dashboard', icon: <LayoutGrid size={20} /> },
             { id: 'dashboard', label: 'Dashboard', icon: <Users size={20} /> },
             { id: 'employees', label: 'Student', icon: <ClipboardList size={20} /> },
@@ -46,6 +49,7 @@ const Layout = ({ children, activeTab, setActiveTab, logout, user, onDeleteAccou
             { id: 'profile', label: 'Profile', icon: <User size={20} /> },
         ],
         TEACHER: [
+            { id: 'home', label: 'Portal Home', icon: <Home size={20} /> },
             { id: 'staff-dashboard', label: 'Dashboard', icon: <LayoutGrid size={20} /> },
             { id: 'attendance', label: 'Attendance', icon: <UserCheck size={20} /> },
             { id: 'leave', label: 'Leave', icon: <ClipboardList size={20} /> },
@@ -53,6 +57,7 @@ const Layout = ({ children, activeTab, setActiveTab, logout, user, onDeleteAccou
             { id: 'profile', label: 'Profile', icon: <User size={20} /> },
         ],
         STUDENT: [
+            { id: 'home', label: 'Portal Home', icon: <Home size={20} /> },
             { id: 'student-dashboard', label: 'Student Portal', icon: <LayoutGrid size={20} /> },
             { id: 'schedule', label: 'Class Schedule', icon: <Calendar size={20} /> },
             { id: 'leave', label: 'Leave Application', icon: <ClipboardList size={20} /> },

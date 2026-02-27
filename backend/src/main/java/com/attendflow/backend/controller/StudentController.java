@@ -32,7 +32,8 @@ public class StudentController {
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<Student> updateStatus(@PathVariable Long id, @RequestBody Student statusUpdate) {
+    public ResponseEntity<Student> updateStatus(@PathVariable @io.micrometer.common.lang.NonNull Long id,
+            @RequestBody Student statusUpdate) {
         return studentRepository.findById(id)
                 .map(student -> {
                     student.setStatus(statusUpdate.getStatus());
@@ -43,7 +44,8 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student studentDetails) {
+    public ResponseEntity<Student> updateStudent(@PathVariable @io.micrometer.common.lang.NonNull Long id,
+            @RequestBody Student studentDetails) {
         return studentRepository.findById(id)
                 .map(student -> {
                     student.setName(studentDetails.getName());
@@ -89,7 +91,8 @@ public class StudentController {
     }
 
     @PostMapping
-    public Student addStudent(@RequestBody Student student) {
+    public @io.micrometer.common.lang.NonNull Student addStudent(
+            @RequestBody @io.micrometer.common.lang.NonNull Student student) {
         return studentRepository.save(student);
     }
 }

@@ -4,7 +4,7 @@ import { Mail, Lock, ArrowRight, ShieldCheck, KeyRound, AlertCircle, CheckCircle
 import { api } from '../api';
 import SgpLogo from '../assets/logo.png';
 
-const LoginPage = ({ onLogin, onSwitchToRegister }) => {
+const LoginPage = ({ onLogin, onSwitchToRegister, onBackToHome }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -41,8 +41,8 @@ const LoginPage = ({ onLogin, onSwitchToRegister }) => {
         } catch (err) {
             setForgotStatus({
                 type: 'error',
-                message: err.message === 'Recovery request failed'
-                    ? 'Identity not found in institutional registry.'
+                message: err.message.includes('not found') || err.message === 'Recovery request failed'
+                    ? 'This email ID does not match any registered user account.'
                     : err.message || 'System linkage failed. Please try again later.'
             });
         }
@@ -57,6 +57,15 @@ const LoginPage = ({ onLogin, onSwitchToRegister }) => {
             >
                 <img src={SgpLogo} alt="Sanjay Gandhi Polytechnic" />
             </motion.div>
+            
+            <motion.button
+                onClick={onBackToHome}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                style={{ position: 'fixed', top: '24px', left: '24px', background: 'white', border: '1px solid #e2e8f0', padding: '10px 20px', borderRadius: '12px', fontSize: '13px', fontWeight: 700, color: '#64748b', cursor: 'pointer', zIndex: 100, display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}
+            >
+                <ArrowRight size={16} style={{ transform: 'rotate(180deg)' }} /> Return Home
+            </motion.button>
 
             <motion.div
                 className="login-card"

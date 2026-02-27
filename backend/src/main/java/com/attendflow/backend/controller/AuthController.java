@@ -98,7 +98,8 @@ public class AuthController {
                 return ResponseEntity.internalServerError().body("Failed to send email: " + e.getMessage());
             }
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(404).body("Error: Identity not found in institutional registry.");
+
     }
 
     @DeleteMapping("/delete/{id}")
