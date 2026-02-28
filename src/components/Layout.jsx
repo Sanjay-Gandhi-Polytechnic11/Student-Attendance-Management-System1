@@ -36,8 +36,6 @@ const Layout = ({ children, activeTab, setActiveTab, logout, user, onDeleteAccou
             { id: 'analytics', label: 'Detailed Analytics', icon: <FileBarChart size={20} /> },
             { id: 'reports', label: 'Central Reports', icon: <FileBarChart size={20} /> },
             { id: 'students', label: 'Faculty Registry', icon: <Users size={20} /> },
-            { id: 'settings', label: 'Portal Config', icon: <Settings size={20} /> },
-            { id: 'profile', label: 'Profile', icon: <User size={20} /> },
         ],
         HOD: [
             { id: 'home', label: 'Portal Home', icon: <Home size={20} /> },
