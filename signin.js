@@ -12,7 +12,7 @@ document.getElementById('signinForm').addEventListener('submit', async function 
 
     try {
         // Simulate API call (replace with actual backend endpoint)
-        const response = await fetch('http://localhost:7000/api/auth/login', {
+        const response = await fetch('http://localhost:9004/api/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -147,7 +147,7 @@ window.addEventListener('load', function () {
 
 async function verifyToken(token) {
     try {
-        const response = await fetch('http://localhost:7000/api/auth/verify', {
+        const response = await fetch('http://localhost:9004/api/auth/verify', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`

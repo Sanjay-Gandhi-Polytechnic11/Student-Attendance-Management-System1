@@ -169,6 +169,16 @@ function App() {
         }
     };
 
+    const handleSendIndividualSms = async (student) => {
+        try {
+            const result = await api.sendIndividualSms(student);
+            return result;
+        } catch (error) {
+            console.error('SMS send error:', error);
+            throw error;
+        }
+    };
+
     const handleUpdateStudent = async (id, updatedData) => {
         try {
             // Find current student to check if status changed
@@ -251,6 +261,7 @@ function App() {
                         students={students}
                         onStatusChange={handleStatusChange}
                         onUpdateStudent={handleUpdateStudent}
+                        onSendIndividualSMS={handleSendIndividualSms}
                     />
                 </div>
             )}

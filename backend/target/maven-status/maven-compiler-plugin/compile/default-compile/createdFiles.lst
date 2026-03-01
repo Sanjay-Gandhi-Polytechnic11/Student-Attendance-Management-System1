@@ -1,10 +1,10 @@
 com\attendflow\backend\model\User.class
 com\attendflow\backend\model\Student.class
+com\attendflow\backend\AttendFlowApplication.class
+com\attendflow\backend\config\DataInitializer.class
 com\attendflow\backend\repository\StudentRepository.class
 com\attendflow\backend\service\EmailService.class
 com\attendflow\backend\controller\AuthController.class
 com\attendflow\backend\controller\StudentController.class
 com\attendflow\backend\config\SecurityConfig.class
-com\attendflow\backend\AttendFlowApplication.class
 com\attendflow\backend\repository\UserRepository.class
-com\attendflow\backend\config\DataInitializer.class

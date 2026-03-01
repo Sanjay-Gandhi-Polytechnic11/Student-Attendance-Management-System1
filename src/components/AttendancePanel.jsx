@@ -280,12 +280,19 @@ const AttendancePanel = ({ students, onStatusChange, onUpdateStudent, onSendIndi
                                         onClick={() => onStatusChange(student.id, 'Absent')}
                                     />
                                     <button
-                                        onClick={() => {
-                                            if (window.confirm(`Send status SMS for ${student.name}?`)) {
-                                                if (onSendIndividualSMS) {
-                                                    onSendIndividualSMS(student);
-                                                } else {
-                                                    alert(`SMS protocol initiated for ${student.name}: Status ${student.status}`);
+                                        onClick={async () => {
+                                            if (!student.parentPhoneNumber || student.parentPhoneNumber === 'UNLINKED') {
+                                                alert(`No parent phone number saved for ${student.name}. Please edit the student record first.`);
+                                                return;
+                                            }
+                                            if (window.confirm(`Send attendance SMS to parent of ${student.name}?\nStatus: ${student.status}\nPhone: ${student.parentPhoneNumber}`)) {
+                                                try {
+                                                    if (onSendIndividualSMS) {
+                                                        const result = await onSendIndividualSMS(student);
+                                                        alert(result?.message || 'SMS Sent Successfully To The Recipient');
+                                                    }
+                                                } catch (err) {
+                                                    alert('Failed to send SMS: ' + err.message);
                                                 }
                                             }
                                         }}
