@@ -99,9 +99,9 @@ const HomePage = ({ onLogin, onRegister, onDashboard, isAuthenticated, hideNavba
                         <h2 className="text-3xl font-black text-slate-900 mb-12 tracking-tight">Development Team</h2>
                         <div className="flex flex-col items-center gap-4">
                             {[
-                                "Dasari Charan Venkat",
-                                "Shaik Irshan",
                                 "M Shiva Balaji Gouda",
+                                "Shaik Irshan",
+                                "Dasari Charan Venkat",
                                 "Sidda Reddy",
                                 "Harsha Reddy",
                                 "Indravaraprasad"

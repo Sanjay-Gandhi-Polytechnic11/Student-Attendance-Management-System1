@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:9004/api';
+const API_BASE_URL = 'http://localhost:9005/api';
 
 export const api = {
     // Auth endpoints
@@ -17,7 +17,7 @@ export const api = {
         } catch (error) {
             console.error('Login error:', error);
             if (error.message === 'Failed to fetch') {
-                throw new Error('Backend server is unreachable. Please ensure the Spring Boot application is running on port 9004.');
+                throw new Error('Backend server is unreachable. Please ensure the Spring Boot application is running on port 9005.');
             }
             throw error;
         }
@@ -56,7 +56,7 @@ export const api = {
         } catch (error) {
             console.error('Registration error:', error);
             if (error.message === 'Failed to fetch') {
-                throw new Error('Backend server is unreachable. Please ensure the Spring Boot application is running on port 9004.');
+                throw new Error('Backend server is unreachable. Please ensure the Spring Boot application is running on port 9005.');
             }
             throw error;
         }
@@ -142,50 +142,7 @@ export const api = {
             throw error;
         }
     },
-    async sendIndividualSms(student) {
-        try {
-            const response = await fetch(`${API_BASE_URL}/sms/send-individual`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(student)
-            });
-            // Safely read body as text first to avoid crash on empty/non-JSON responses
-            const text = await response.text();
-            let data = {};
-            try {
-                data = text ? JSON.parse(text) : {};
-            } catch {
-                // Backend returned non-JSON (e.g. HTML error page)
-                throw new Error('Server error: ' + (text.substring(0, 120) || 'Empty response'));
-            }
-            if (!response.ok) throw new Error(data.message || 'Failed to send SMS');
-            return data;
-        } catch (error) {
-            console.error('Send individual SMS error:', error);
-            throw error;
-        }
-    },
-    async sendSmsToParents(students) {
-        try {
-            const response = await fetch(`${API_BASE_URL}/sms/send-bulk`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(students)
-            });
-            const text = await response.text();
-            let data = {};
-            try {
-                data = text ? JSON.parse(text) : {};
-            } catch {
-                throw new Error('Server error: ' + (text.substring(0, 120) || 'Empty response'));
-            }
-            if (!response.ok) throw new Error(data.message || 'Failed to send bulk SMS');
-            return data;
-        } catch (error) {
-            console.error('Send bulk SMS error:', error);
-            throw error;
-        }
-    },
+
     async addStudent(studentData) {
         try {
             const response = await fetch(`${API_BASE_URL}/students`, {

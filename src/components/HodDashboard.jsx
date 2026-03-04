@@ -2,41 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import {
     Users,
-    BarChart3,
     Calendar,
-    Clock,
-    TrendingUp,
     ShieldCheck,
     LayoutGrid,
     GitBranch,
-    FileText,
-    Activity,
-    UserCheck,
-    AlertTriangle,
-    Download,
-    Mail,
-    UserPlus,
-    CheckCircle2,
-    XCircle,
-    Zap,
-    Info,
     BookOpen,
     Search,
     Smartphone
 } from 'lucide-react';
-import {
-    BarChart,
-    Bar,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    ResponsiveContainer,
-    PieChart,
-    Pie,
-    Cell,
-    Legend
-} from 'recharts';
+
 import { generateCSV, generateTextReport, downloadFile } from '../utils/reportUtils';
 
 const HodDashboard = ({ onNavigate, students = [], onUpdateStudent }) => {
@@ -48,21 +22,7 @@ const HodDashboard = ({ onNavigate, students = [], onUpdateStudent }) => {
 
     const overallPercentage = Math.round((presentCount / totalStudentsCount) * 100);
 
-    const distributionData = [
-        { name: 'Present', value: presentCount, color: '#2563eb' },
-        { name: 'Absent', value: absentCount, color: '#f43f5e' },
-        { name: 'On Leave', value: onLeaveCount, color: '#f59e0b' },
-    ];
 
-    const monthlyAttendanceData = [
-        { name: 'J', value: 45 },
-        { name: 'F', value: 52 },
-        { name: 'M', value: 61 },
-        { name: 'A', value: 75 },
-        { name: 'M', value: 82 },
-        { name: 'J', value: 78 },
-        { name: 'J', value: 95 },
-    ];
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -182,87 +142,6 @@ const HodDashboard = ({ onNavigate, students = [], onUpdateStudent }) => {
                 />
             </div>
 
-            {/* 3. CHARTS SECTIONS */}
-            <div className="grid grid-cols-1 gap-8 px-2">
-                {/* 3.1 ATTENDANCE OVERVIEW */}
-                <motion.div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100" variants={itemVariants}>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-10">
-                        Attendance Overview
-                    </h2>
-
-                    <div className="flex flex-col md:flex-row items-center justify-start gap-16">
-                        <div className="w-56 h-56 relative">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <PieChart>
-                                    <Pie
-                                        data={distributionData}
-                                        cx="50%"
-                                        cy="50%"
-                                        innerRadius={70}
-                                        outerRadius={95}
-                                        paddingAngle={0}
-                                        dataKey="value"
-                                        startAngle={90}
-                                        endAngle={450}
-                                    >
-                                        {distributionData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={entry.color} />
-                                        ))}
-                                    </Pie>
-                                </PieChart>
-                            </ResponsiveContainer>
-                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                <span className="text-5xl font-bold text-slate-900">{overallPercentage}%</span>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col gap-6 min-w-[200px]">
-                            {distributionData.map(entry => (
-                                <div key={entry.name} className="flex items-center justify-between gap-12">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-4 h-4 rounded-sm" style={{ backgroundColor: entry.color }}></div>
-                                        <span className="text-xl font-medium text-slate-700">{entry.name}</span>
-                                    </div>
-                                    <span className="text-xl font-bold text-slate-900">
-                                        {totalStudentsCount > 0 ? Math.round((entry.value / totalStudentsCount) * 100) : 0}%
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </motion.div>
-
-                {/* 3.2 MONTHLY ATTENDANCE */}
-                <motion.div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100" variants={itemVariants}>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-10">
-                        Monthly Attendance
-                    </h2>
-                    <div className="h-[250px] w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={monthlyAttendanceData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                                <XAxis
-                                    dataKey="name"
-                                    axisLine={false}
-                                    tickLine={false}
-                                    stroke="#94a3b8"
-                                    fontSize={14}
-                                    dy={10}
-                                />
-                                <YAxis
-                                    axisLine={false}
-                                    tickLine={false}
-                                    stroke="#94a3b8"
-                                    fontSize={14}
-                                    ticks={[0, 1, 2]}
-                                />
-                                <Tooltip cursor={{ fill: 'transparent' }} />
-                                <Bar dataKey="value" fill="#3b82f6" radius={[6, 6, 0, 0]} barSize={40} />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
-                </motion.div>
-            </div>
 
             {/* 4. STUDENT INFRASTRUCTURE REGISTRY */}
             <motion.div className="mx-2 bg-white rounded-[32px] p-10 shadow-sm border border-slate-100" variants={itemVariants}>

@@ -20,8 +20,7 @@ import {
     ShieldCheck,
     GitBranch,
     LayoutGrid,
-    Edit,
-    Mail
+    Edit
 } from 'lucide-react';
 
 const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, onUpdateStudent }) => {
@@ -402,8 +401,8 @@ const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, 
                                 <th>Personnel Details</th>
                                 <th className="text-center">Sector / Unit</th>
                                 <th className="text-center">Status Control</th>
-                                <th className="text-center">SMS Notification</th>
                                 <th>Intelligence / Remarks</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -474,22 +473,7 @@ const StaffAttendanceEntry = ({ students: initialStudents = [], onStatusChange, 
                                             </button>
                                         </div>
                                     </td>
-                                    <td>
-                                        <div className="flex items-center justify-center gap-3">
-                                            <button
-                                                onClick={() => {
-                                                    const status = attendanceRecords[s.id]?.status === 'present' ? 'Present' : 'Absent';
-                                                    if (window.confirm(`Send status SMS for ${s.name}?`)) {
-                                                        alert(`SMS protocol initiated for ${s.name}: Status ${status}`);
-                                                    }
-                                                }}
-                                                className="p-2.5 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-xl hover:bg-indigo-500 hover:text-white transition-all group"
-                                                title="Send Status SMS"
-                                            >
-                                                <Mail size={16} className="group-hover:scale-110 transition-transform" />
-                                            </button>
-                                        </div>
-                                    </td>
+
                                     <td>
                                         <input
                                             type="text"

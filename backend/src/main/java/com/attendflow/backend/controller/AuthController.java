@@ -42,7 +42,7 @@ public class AuthController {
         }
         User savedUser = userRepository.save(user);
 
-        // If it's a student, send a welcome SMS and create a student record
+        // If it's a student, create a student record in the registry
         if ("STUDENT".equals(user.getRole())) {
             // Create student entry in the registry
             Student student = new Student();

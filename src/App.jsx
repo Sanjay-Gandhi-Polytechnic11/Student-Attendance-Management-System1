@@ -169,15 +169,7 @@ function App() {
         }
     };
 
-    const handleSendIndividualSms = async (student) => {
-        try {
-            const result = await api.sendIndividualSms(student);
-            return result;
-        } catch (error) {
-            console.error('SMS send error:', error);
-            throw error;
-        }
-    };
+
 
     const handleUpdateStudent = async (id, updatedData) => {
         try {
@@ -252,7 +244,6 @@ function App() {
             {activeTab === 'hod-dashboard' && <HodDashboard onNavigate={(tab) => setActiveTab(tab)} students={students} onUpdateStudent={handleUpdateStudent} />}
             {activeTab === 'staff-dashboard' && <StaffDashboard onNavigateToAttendance={(tab) => setActiveTab(tab)} students={students} />}
             {activeTab === 'student-dashboard' && <StudentDashboard user={currentUser} students={students} onStatusChange={handleStatusChange} />}
-
             {(activeTab === 'dashboard' || activeTab === 'analytics') && <Dashboard students={students} searchQuery={searchQuery} isSearching={isSearching} />}
             {activeTab === 'reports' && <ReportPage records={students} />}
             {(activeTab === 'attendance' || activeTab === 'quick-mark' || activeTab === 'attenditics' || activeTab === 'staff-attendance') && (
@@ -261,7 +252,7 @@ function App() {
                         students={students}
                         onStatusChange={handleStatusChange}
                         onUpdateStudent={handleUpdateStudent}
-                        onSendIndividualSMS={handleSendIndividualSms}
+
                     />
                 </div>
             )}

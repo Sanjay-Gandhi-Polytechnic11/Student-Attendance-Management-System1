@@ -6,8 +6,6 @@ import {
     Moon,
     Shield,
     Database,
-    Mail,
-    Smartphone,
     Monitor,
     Globe,
     Clock,
@@ -212,13 +210,7 @@ const PortalSettings = ({ settings, setSettings, onDeleteAccount, onSyncRegistry
                             enabled={settings.emailAlerts}
                             onToggle={() => handleToggle('emailAlerts')}
                         />
-                        <SettingsToggle
-                            icon={<Smartphone size={18} />}
-                            label="SMS Priority Alerts"
-                            sub="Emergency protocol bypass"
-                            enabled={settings.smsAlerts}
-                            onToggle={() => handleToggle('smsAlerts')}
-                        />
+
                     </div>
                 </motion.div>
 

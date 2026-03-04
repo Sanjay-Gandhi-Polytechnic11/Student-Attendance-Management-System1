@@ -7,19 +7,9 @@ import {
     Activity,
     PlayCircle,
     FileText,
-    Download,
-    Mail,
-    RefreshCw
+    Download
 } from 'lucide-react';
-import {
-    AreaChart,
-    Area,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    ResponsiveContainer,
-} from 'recharts';
+
 import { generateCSV, downloadFile } from '../utils/reportUtils';
 
 const StaffDashboard = ({ onNavigateToAttendance, students = [] }) => {
@@ -29,16 +19,7 @@ const StaffDashboard = ({ onNavigateToAttendance, students = [] }) => {
     const absentToday = students.filter(s => s.status === 'Absent').length || 0;
     const onLeaveCount = students.filter(s => s.status === 'Late' || s.status === 'Leave').length || 0;
     
-    // Simulated wave data for the area chart
-    const trendData = [
-        { name: 'Mon', value: 45 },
-        { name: 'Tue', value: 72 },
-        { name: 'Wed', value: 68 },
-        { name: 'Thu', value: 85 },
-        { name: 'Fri', value: 82 },
-        { name: 'Sat', value: 55 },
-        { name: 'Sun', value: 75 },
-    ];
+
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -101,72 +82,7 @@ const StaffDashboard = ({ onNavigateToAttendance, students = [] }) => {
                 />
             </div>
 
-            {/* 2. MAIN ANALYTICS HUB - Area Chart */}
-            <motion.div 
-                className="bg-white border-slate-100 overflow-hidden shadow-sm mx-2" 
-                style={{ borderRadius: '32px', borderStyle: 'solid', borderWidth: '1px' }}
-                variants={itemVariants}
-            >
-                <div className="p-8 border-b border-slate-50 flex items-center justify-between">
-                    <div className="flex flex-col gap-2 items-start">
-                        <h3 className="text-xl font-black text-slate-800 tracking-tight">Operational Attendance Analytics</h3>
-                        <div className="flex items-center gap-2">
-                             <span className="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
-                             <span className="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
-                             <span className="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
-                        </div>
-                    </div>
-                    <button className="text-slate-300 hover:text-indigo-600" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                        <RefreshCw size={20} />
-                    </button>
-                </div>
 
-                <div className="p-8">
-                    {/* Explicitly defined height for Recharts */}
-                    <div style={{ height: '400px', width: '100%', position: 'relative' }}>
-                        <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={trendData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                                <defs>
-                                    <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.15}/>
-                                        <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}/>
-                                    </linearGradient>
-                                </defs>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                                <XAxis 
-                                    dataKey="name" 
-                                    axisLine={false} 
-                                    tickLine={false} 
-                                    tick={{fill: '#94a3b8', fontSize: 12, fontWeight: 700}} 
-                                    dy={15}
-                                />
-                                <YAxis 
-                                    axisLine={false} 
-                                    tickLine={false} 
-                                    tick={{fill: '#94a3b8', fontSize: 12, fontWeight: 700}} 
-                                    dx={-10}
-                                />
-                                <Tooltip 
-                                    contentStyle={{ 
-                                        borderRadius: '20px', 
-                                        border: 'none', 
-                                        boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)',
-                                        padding: '12px 16px' 
-                                    }}
-                                />
-                                <Area 
-                                    type="monotone" 
-                                    dataKey="value" 
-                                    stroke="#4f46e5" 
-                                    strokeWidth={4}
-                                    fillOpacity={1} 
-                                    fill="url(#colorValue)" 
-                                />
-                            </AreaChart>
-                        </ResponsiveContainer>
-                    </div>
-                </div>
-            </motion.div>
 
             {/* 3. LIVE FEED SECTION */}
             <motion.div variants={itemVariants} className="px-2" style={{ marginTop: '48px' }}>
@@ -202,13 +118,7 @@ const StaffDashboard = ({ onNavigateToAttendance, students = [] }) => {
                         onClick={() => downloadFile(generateCSV(students), 'Registry_Report.csv')}
                         color="emerald"
                     />
-                    <ActionCard
-                        title="Send SMS"
-                        desc="Notify"
-                        icon={<Mail size={22} />}
-                        onClick={onSendSMS}
-                        color="amber"
-                    />
+
                     <ActionCard
                         title="Profile"
                         desc="Credentials"

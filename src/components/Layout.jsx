@@ -38,7 +38,7 @@ const Layout = ({ children, activeTab, setActiveTab, logout, user, onDeleteAccou
             { id: 'students', label: 'Faculty Registry', icon: <Users size={20} /> },
         ],
         HOD: [
-            { id: 'home', label: 'Portal Home', icon: <Home size={20} /> },
+
             { id: 'hod-dashboard', label: 'Dashboard', icon: <LayoutGrid size={20} /> },
             { id: 'dashboard', label: 'Dashboard', icon: <Users size={20} /> },
             { id: 'employees', label: 'Student', icon: <ClipboardList size={20} /> },

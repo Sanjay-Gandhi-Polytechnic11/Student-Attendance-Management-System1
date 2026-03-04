@@ -14,7 +14,6 @@ import {
     UserCheck,
     AlertTriangle,
     Download,
-    Mail,
     CheckCircle2,
     XCircle,
     Info,
@@ -38,7 +37,7 @@ import {
     Line
 } from 'recharts';
 
-const StudentDashboard = ({ user, students = [], onStatusChange, onSendSMS }) => {
+const StudentDashboard = ({ user, students = [], onStatusChange }) => {
     const [showStatusPicker, setShowStatusPicker] = useState(false);
 
     // Find own record from the students prop
@@ -385,16 +384,7 @@ const StudentDashboard = ({ user, students = [], onStatusChange, onSendSMS }) =>
                                         <Trash2 size={24} className="group-hover/trash:scale-110 transition-transform" />
                                     </button>
 
-                                    {/* NOTIFY PARENTS */}
-                                    <button 
-                                        onClick={() => myRecord && onSendSMS(myRecord)}
-                                        disabled={!myRecord}
-                                        className="flex items-center gap-3 px-8 py-4 rounded-xl font-black bg-white border-2 border-indigo-200 text-indigo-500 hover:bg-indigo-600 hover:text-white transition-all uppercase tracking-widest text-[11px] active:scale-95"
-                                        style={{ pointerEvents: 'auto', position: 'relative', zIndex: 20 }}
-                                    >
-                                        <Mail size={18} />
-                                        Notify Parents
-                                    </button>
+
                                 </div>
                             </div>
                         </div>

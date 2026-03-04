@@ -16,11 +16,10 @@ import {
     Calendar,
     LayoutGrid,
     Edit,
-    Mail,
     RefreshCw
 } from 'lucide-react';
 
-const AttendancePanel = ({ students, onStatusChange, onUpdateStudent, onSendIndividualSMS }) => {
+const AttendancePanel = ({ students, onStatusChange, onUpdateStudent }) => {
     const [filter, setFilter] = useState('All');
     const [localSearch, setLocalSearch] = useState('');
     const [editingStudent, setEditingStudent] = useState(null);
@@ -279,28 +278,7 @@ const AttendancePanel = ({ students, onStatusChange, onUpdateStudent, onSendIndi
                                         icon={<X size={14} />}
                                         onClick={() => onStatusChange(student.id, 'Absent')}
                                     />
-                                    <button
-                                        onClick={async () => {
-                                            if (!student.parentPhoneNumber || student.parentPhoneNumber === 'UNLINKED') {
-                                                alert(`No parent phone number saved for ${student.name}. Please edit the student record first.`);
-                                                return;
-                                            }
-                                            if (window.confirm(`Send attendance SMS to parent of ${student.name}?\nStatus: ${student.status}\nPhone: ${student.parentPhoneNumber}`)) {
-                                                try {
-                                                    if (onSendIndividualSMS) {
-                                                        const result = await onSendIndividualSMS(student);
-                                                        alert(result?.message || 'SMS Sent Successfully To The Recipient');
-                                                    }
-                                                } catch (err) {
-                                                    alert('Failed to send SMS: ' + err.message);
-                                                }
-                                            }
-                                        }}
-                                        className="p-3 bg-indigo-50 text-indigo-600 border border-indigo-100 rounded-xl hover:bg-indigo-600 hover:text-white transition-all group shadow-sm shadow-indigo-100"
-                                        title="Send Status SMS"
-                                    >
-                                        <Mail size={16} className="group-hover:scale-110 transition-transform" />
-                                    </button>
+
                                 </div>
                             </motion.div>
                         )) : (
@@ -412,7 +390,7 @@ const AttendancePanel = ({ students, onStatusChange, onUpdateStudent, onSendIndi
                                     </select>
                                 </div>
                                 <div className="space-y-2 col-span-2">
-                                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Parent Contact Node (SMS)</label>
+                                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Parent Contact Number</label>
                                     <input
                                         type="text"
                                         placeholder="+1 234 567 890"
